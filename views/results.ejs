@@ -1,0 +1,201 @@
+<!-- results.html -->
+<html>
+
+<head>
+    <style>
+        /* Global Styles */
+
+        body {
+            background: #f6f5f7;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        h1,
+        h2,
+        h3 {
+            color: #FF416C;
+        }
+
+        a {
+            color: #FF4B2B;
+            font-size: 14px;
+        }
+
+        /* Results Styles */
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 6px 6px rgba(0, 0, 0, 0.23);
+            overflow: hidden;
+            max-width: 1000px;
+            margin: 25px auto;
+        }
+
+        .column {
+            flex: 1 1 calc(50% - 20px);
+            box-sizing: border-box;
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            max-height: 70vh;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .column-header {
+            font-size: 1.8em;
+            font-weight: bold;
+            background: linear-gradient(to right, #FF4B2B, #FF416C);
+            color: #fff;
+            padding: 15px;
+            border-bottom: 1px solid #dee2e6;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .column-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        li {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #dee2e6;
+            padding-bottom: 15px;
+        }
+
+        img {
+            width: 100px;
+            height: auto;
+            border-radius: 10px;
+            margin-right: 20px;
+        }
+
+        h3 {
+            color: #3F2B96;
+        }
+
+        p {
+            color: #6c757d;
+        }
+
+        a {
+            color: #3F2B96;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        a:hover {
+            color: #A8C0FF;
+        }
+    </style>
+</head>
+
+<body>
+    <div style="height: 150px;"></div>
+
+    <div class="container">
+        <div class="column">
+            <div class="column-header">Amazon Results</div>
+            <div class="column-content">
+                <ul>
+                    <!-- Amazon data rendering -->
+                    <% amazonData.forEach(product=> { %>
+                        <li>
+                            <img src="<%= product.image_url %>" alt="<%= product.title %>">
+                            <div>
+                                <h3>
+                                    <%= product.title %>
+                                </h3>
+                                <p>
+                                    <%= product.price %>
+                                </p>
+                                <a href="<%= product.url %>" target="_blank">View Details</a>
+                            </div>
+                        </li>
+                        <% }) %>
+                </ul>
+            </div>
+        </div>
+
+        <div class="column">
+            <div class="column-header">Flipkart Results</div>
+            <div class="column-content">
+                <ul>
+                    <!-- Flipkart data rendering -->
+                    <% flipkartData.forEach(product=> { %>
+                        <li>
+                            <img src="<%= product.image_url %>" alt="<%= product.title %>">
+                            <div>
+                                <h3>
+                                    <%= product.title %>
+                                </h3>
+                                <p>
+                                    <%= product.price %>
+                                </p>
+                                <a href="<%= product.url %>" target="_blank">View Details</a>
+                            </div>
+                        </li>
+                        <% }) %>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- results.html
+<html>
+<body>
+    <div>
+        <h2>Amazon Results</h2>
+        <ul>
+            <% amazonData.forEach(product => { %>
+                <li>
+                    <h3><%= product.title %></h3>
+                    <p><%= product.price %></p>
+                    <a href="<%= product.url %>" target="_blank">View Details</a>
+                </li>
+            <% }) %>
+        </ul>
+    </div>
+
+    <div>
+        <h2>Flipkart Results</h2>
+        <ul>
+            <% flipkartData.forEach(product => { %>
+                <li>
+                    <h3><%= product.title %></h3>
+                    <p><%= product.price %></p>
+                    <a href="<%= product.url %>" target="_blank">View Details</a>
+                </li>
+            <% }) %>
+        </ul>
+    </div>
+</body>
+</html> -->

@@ -22,6 +22,60 @@
             color: #FF416C;
         }
 
+
+        nav.navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(to right, #FF4B2B, #fd8b71, #f97b98, #fd2b5c);
+            border: #FF416C;
+            padding: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-left a {
+            margin-right: 20px;
+            text-decoration: none;
+            color: #3F2B96;
+            font-weight: bold;
+            font-size: 18px;
+            transition: color 0.3s;
+        }
+
+        .navbar-left a:hover {
+            color: #A8C0FF;
+        }
+
+        .navbar-left span {
+            color: #3F2B96;
+            font-weight: bold;
+            font-size: 22px;
+        }
+
+        .navbar-right a {
+            margin-left: 20px;
+            text-decoration: none;
+            color: #fff;
+            font-weight: bold;
+            font-size: 18px;
+            transition: color 0.3s;
+        }
+
+        .navbar-right a:hover {
+            color: #A8C0FF;
+        }
+
+        svg {
+            margin-right: 1px;
+            fill: #faf6f6;
+            /* Red color for the heart */
+        }
+
         button {
             border-radius: 20px;
             border: 1px solid #FF416C;
@@ -47,23 +101,58 @@
             flex-direction: column;
         }
 
-        input[type="text"] {
+        input[type="text"],
+        select {
             padding: 20px;
             border: 1px solid #eee;
             border-radius: 20px;
             font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        select[name="category"] option {
+            color: #6c757d;
+            /* Match with the input placeholder color */
         }
 
         button {
-            margin-top: 20px;
+            margin-top: 10px;
             padding: 20px;
         }
     </style>
 </head>
 
 <body>
+    <nav class="navbar">
+        <div class="navbar-left">
+            <a href="/">Back</a>
+            <span>WiseCart</span>
+        </div>
+        <div class="navbar-right">
+            <a href="/logout">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
+                    <path d="M0 0h24v24H0z" fill="none"/>
+                    <path d="M17 3a1 1 0 0 1 1 1v16a1 1 0 0 1-2 0V4a1 1 0 0 1 1-1zm-3 18H6a1 1 0 0 1-1-1v-2h2v1h9v-1h2v2a1 1 0 0 1-1 1zm-4-9H4v-2h10v2z"/>
+                  </svg>
+                    
+                Logout</a>
+            <a href="/wishlist">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 5 22 7" fill="currentColor" width="20" height="20">
+
+                    <path d="M12 21.35l-1.45-1.32C5.4 14.25 2 11.1 2 7.25 2 4.42 4.42 2 7.25 2c1.74 0 3.41.81 4.75 2.19C13.34 2.81 15.01 2 16.75 2 19.58 2 22 4.42 22 7.25c0 3.85-3.4 7-8.55 12.8L12 21.35z"/>
+                  </svg>
+
+                Wishlist
+            </a>
+        </div>
+    </nav>
     <form action="/search" method="post">
-        <input type="text" name="search" placeholder="Search products">
+        <select name="category" required>
+            <option value="" disabled selected>Select Category</option>
+            <option value="electronics">Electronics</option>
+            <option value="lifestyle">Lifestyle</option>
+        </select>
+        <input type="text" name="search" placeholder="Search products" required>
         <button type="submit">Search</button>
     </form>
 </body>

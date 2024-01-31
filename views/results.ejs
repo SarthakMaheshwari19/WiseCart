@@ -25,25 +25,29 @@
 
         .container {
             display: flex;
+            justify-content: center;
             flex-wrap: wrap;
             gap: 20px;
-            background: #fff;
+            background: #fefefe00;
             border-radius: 10px;
-            box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 6px 6px rgba(0, 0, 0, 0.23);
+            
             overflow: hidden;
-            max-width: 1000px;
+            max-width: 1300px;
             margin: 25px auto;
         }
 
         .column {
-            flex: 1 1 calc(50% - 20px);
+            background-color: whitesmoke;
+            flex: 1 1 calc(30% - 10px);
             box-sizing: border-box;
             margin-bottom: 20px;
             display: flex;
             flex-direction: column;
             max-height: 70vh;
+            max-width: 500px;
             border-radius: 10px;
             overflow: hidden;
+            box-shadow: 5px 10px 7px rgba(0, 0, 0, 0.25), 0 6px 6px rgba(0, 0, 0, 0.23);
         }
 
         .column-header {
@@ -77,8 +81,8 @@
         }
 
         img {
-            width: 100px;
-            height: auto;
+            width: 136px;
+            height: 220px;
             border-radius: 10px;
             margin-right: 20px;
         }
@@ -104,7 +108,7 @@
 </head>
 
 <body>
-    <div style="height: 150px;"></div>
+    <div style="height: 100px;"></div>
 
     <div class="container">
         <div class="column">
@@ -129,6 +133,28 @@
                 </ul>
             </div>
         </div>
+
+        <% if (myntraData && myntraData.length > 0) { %> 
+            <div id="myntra-results" class="column">
+                <div class="column-header">Myntra Results</div>
+                <div class="column-content">
+                    <ul>
+                        <!-- Myntra data rendering -->
+                        <% myntraData.forEach(product => { %>
+                            <li>
+                                <img src="<%= product.image_url %>" alt="<%= product.title %>">
+                                <div>
+                                    <h3><%= product.title %></h3>
+                                    <p><%= product.price %></p>
+                                    <a href="<%= product.url %>" target="_blank">View Details</a>
+                                </div>
+                            </li>
+                        <% }) %>
+                    </ul>
+                </div>
+            </div>
+        <% } %>
+        
 
         <div class="column">
             <div class="column-header">Flipkart Results</div>

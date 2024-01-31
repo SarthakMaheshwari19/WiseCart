@@ -18,7 +18,7 @@ const db = mysql.createPool({
     connectionLimit: 10,
     queueLimit: 0
 });
-console.log(db);
+// console.log(db);
 
 // Export the database connection and the app
 module.exports = db.promise();
@@ -32,6 +32,7 @@ app.use(session({
     resave: false,
     saveUninitialized: false
 }));
+
 
 app.set('view engine', 'ejs');
 // app.engine('html', require('ejs').renderFile);
@@ -48,25 +49,42 @@ app.use(function (req, res, next) {
       return res.redirect('/auth');
     }
     next();
-})
+});
+app.get('/logout', (req, res) => {
+    req.session.destroy(err => {
+        if (err) {
+            console.error('Error destroying session:', err);
+        } else {
+            res.redirect('/auth');
+        }
+    });
+});
+
+
 
 app.get('/', (req, res) => {
-    res.render('index');  // Use path.join for correct file paths
+    res.render('index');  
 });
 
 app.post('/search', async (req, res) => {
     const search_term = req.body.search;
-
+    const category = req.body.category;
+    let myntraData=[]
     // Call Python service for Amazon data
     const amazonData = await getScrapedData('http://127.0.0.1:5001/amazon', search_term);
-    console.log('Amazon Data:', amazonData);
+    // console.log('Amazon Data:', amazonData);
 
     // Call Python service for Flipkart data
     const flipkartData = await getScrapedData('http://127.0.0.1:5001/flipkart', search_term);
-    console.log('Flipkart Data:', flipkartData);
+    // console.log('Flipkart Data:', flipkartData);
+
+    if (category === 'lifestyle') { 
+         myntraData = await getScrapedData('http://127.0.0.1:5001/myntra', search_term);
+        // console.log('Myntra Data:',myntraData);
+    }
 
     // Render the results page with data
-    res.render(path.join(__dirname, 'views', 'results.ejs'), { amazonData, flipkartData });
+    res.render(path.join(__dirname, 'views', 'results.ejs'), { amazonData,flipkartData ,myntraData });
 });
 
 async function getScrapedData(apiEndpoint, search_term) {

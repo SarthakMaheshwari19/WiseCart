@@ -2,12 +2,15 @@
 document.addEventListener('DOMContentLoaded', () => {
     const amazonResults = document.getElementById('amazon-results');
     const flipkartResults = document.getElementById('flipkart-results');
+    const myntraResults = document.getElementById('myntra-results'); 
+
 
     // Fetch and display Amazon results
     fetchResults('/amazon', amazonResults);
 
     // Fetch and display Flipkart results
     fetchResults('/flipkart', flipkartResults);
+    fetchResults('/myntra', myntraResults);
 });
 
 async function fetchResults(endpoint, container) {

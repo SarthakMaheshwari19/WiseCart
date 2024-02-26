@@ -90,6 +90,7 @@ try:
         # options = Options()
         # options.add_argument('--headless')
 
+
         service = Service(r"C:\Users\sarth\Downloads\edgedriver_win64\msedgedriver.exe")
         driver = webdriver.Edge(service=service)
         link=f"https://www.myntra.com/{search_term}"

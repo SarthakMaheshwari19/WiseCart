@@ -90,7 +90,7 @@ try:
         # options = Options()
         # options.add_argument('--headless')
 
-        service = Service(r"C:\Users\sarth\Downloads\edgedriver_win64 (1)\msedgedriver.exe")
+        service = Service(r"C:\Users\sarth\Downloads\edgedriver_win64\msedgedriver.exe")
         driver = webdriver.Edge(service=service)
         link=f"https://www.myntra.com/{search_term}"
         driver.get(link)
@@ -186,13 +186,9 @@ try:
         response = requests.get(url, headers=headers_flipkart)
 
         if response.status_code == 200:
-            # Parse HTML
             
             soup = BeautifulSoup(response.content, 'html.parser')
-            # Initialize results
             results = []
-
-            # Extract data from search results 
             for item in soup.select('div._1AtVbE'):   
 
                 brand_element = item.select_one('div._2WkVRV')

@@ -70,11 +70,9 @@ app.post('/search', async (req, res) => {
     const search_term = req.body.search;
     const category = req.body.category;
     let myntraData=[]
-    // Call Python service for Amazon data
     const amazonData = await getScrapedData('http://127.0.0.1:5001/amazon', search_term);
     // console.log('Amazon Data:', amazonData);
 
-    // Call Python service for Flipkart data
     const flipkartData = await getScrapedData('http://127.0.0.1:5001/flipkart', search_term);
     // console.log('Flipkart Data:', flipkartData);
 
@@ -82,9 +80,16 @@ app.post('/search', async (req, res) => {
          myntraData = await getScrapedData('http://127.0.0.1:5001/myntra', search_term);
         // console.log('Myntra Data:',myntraData);
     }
+    // Pass userId to the template
+    const userId = req.session.userId;
+    
+    // Render the results page with data and userId
+    res.render(path.join(__dirname, 'views', 'results.ejs'), { amazonData, flipkartData, myntraData, userId });
+});
 
-    // Render the results page with data
-    res.render(path.join(__dirname, 'views', 'results.ejs'), { amazonData,flipkartData ,myntraData });
+app.get('/goBack', (req, res) => {
+    // res.send('<script>window.history.back(-1);</script>');
+    res.redirect('back');
 });
 
 async function getScrapedData(apiEndpoint, search_term) {
@@ -96,6 +101,66 @@ async function getScrapedData(apiEndpoint, search_term) {
         return [];
     }
 }
+
+app.post('/wishlist/add', async (req, res) => {
+    const userId = req.session.userId;
+    const { name, price, link, image_link } = req.body;
+
+    const trimmedName = name.trim();
+    const trimmedPrice = price.trim().replace('₹', 'Rs. ');
+    const trimmedLink = link.trim();
+    const trimmedImageLink = image_link.trim();
+
+    // console.log('Received request to add product to wishlist:', { userId, trimmedName, trimmedPrice, trimmedLink, trimmedImageLink });
+    
+    try {
+
+        const [result] = await db.promise().query('INSERT INTO wishlisted_products (user_id, name, price, link, image_link) VALUES (?, ?, ?, ?, ?)',
+            [userId, trimmedName, trimmedPrice, trimmedLink, trimmedImageLink]);
+
+            const productId = result.insertId; 
+            res.status(200).json({ success: true, message: 'Product added to wishlist successfully', productId });
+    } catch (error) {
+        console.error('Error adding product to wishlist:', error);
+        res.status(500).send('Failed to add product to wishlist.');
+    }
+});
+
+
+
+app.post('/wishlist/remove', async (req, res) => {
+    const userId = req.session.userId;
+    const productId = req.body.productId;
+
+    try {
+        await db.execute('SET SQL_SAFE_UPDATES=0');
+        await db.execute('DELETE FROM wishlisted_products WHERE id = ? AND user_id = ?', [productId, userId]);
+
+        res.status(200).json({ success: true }); 
+    } catch (error) {
+        console.error('Error removing product from wishlist:', error);
+        res.status(500).json({ success: false });
+    }
+});
+
+
+app.get('/wishlist', async (req, res) => {
+    // try{
+    const userId = req.session.userId;
+    const [rows] = await db.promise().query('SELECT * FROM wishlisted_products WHERE user_id = ?', [userId]);
+    if (!Array.isArray(rows)) {
+        throw new Error('Query result is not iterable');
+    }
+    console.log('Wishlisted Products Rows:', rows);
+    // res.render(path.join(__dirname, 'views', 'wishlist.ejs'), { amazonData, flipkartData, myntraData, userId });
+    res.render('wishlist', { wishlistedProducts: rows });
+    // }catch (error) {
+    //     console.error('Error fetching or rendering wishlisted products:', error);
+    //     res.status(500).send('Internal Server Error');
+    // }
+});
+
+
 
 app.listen(3000, () => {
     console.log('Server is running on http://localhost:3000');

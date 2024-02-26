@@ -3,9 +3,8 @@
 
 <head>
     <style>
-        /* Global Styles */
-
         body {
+            margin: 0px;
             background: #f6f5f7;
             font-family: 'Montserrat', sans-serif;
         }
@@ -16,9 +15,80 @@
             color: #FF416C;
         }
 
+        nav.navbar {
+            margin: 0px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #ff2e5e;
+            /* background: linear-gradient(to right, #FF4B2B, #fd8b71, #f97b98, #fd2b5c); */
+            border: #FF416C;
+            padding: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-left a {
+            margin-right: 20px;
+            text-decoration: none;
+            color: #fff;
+            font-weight: bold;
+            font-size: 18px;
+            transition: color 0.3s;
+        }
+
+        .navbar-left a:hover {
+            color: #A8C0FF;
+        }
+
+        .navbar-left span {
+            background-color: #fff;
+            padding: 4px;
+            margin-left: 20px;
+            color: black;
+            /* color: #3F2B96; */
+            font-weight: bold;
+            font-size: 22px;
+        }
+
+        .navbar-right a {
+            margin-left: 20px;
+            text-decoration: none;
+            color: #fff;
+            font-weight: bold;
+            font-size: 18px;
+            transition: color 0.3s;
+        }
+
+        .navbar-right a:hover {
+            color: #A8C0FF;
+        }
+
+        svg {
+            margin-right: 1px;
+            fill: #faf6f6;
+            /* Red color for the heart */
+        }
+
         a {
             color: #FF4B2B;
             font-size: 14px;
+        }
+
+        .wishlist-icon {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 1;
+            fill: #edeff1;
+        }
+
+        .wishlist-icon:hover {
+            fill: #FF416C
         }
 
         /* Results Styles */
@@ -30,7 +100,7 @@
             gap: 20px;
             background: #fefefe00;
             border-radius: 10px;
-            
+
             overflow: hidden;
             max-width: 1300px;
             margin: 25px auto;
@@ -73,6 +143,7 @@
         }
 
         li {
+            position: relative;
             display: flex;
             align-items: center;
             margin-bottom: 20px;
@@ -104,10 +175,54 @@
         a:hover {
             color: #A8C0FF;
         }
+
+        a:hover svg {
+            stroke: #A8C0FF
+        }
     </style>
 </head>
 
 <body>
+    <nav class="navbar">
+        <div class="navbar-left">
+            <a href="/goback">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 20" fill="none" stroke="currentColor"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="22">
+                    <path d="M19 12H5M12 5l-7 7 7 7" />
+                    <circle cx="12" cy="12" r="10" stroke="currentColor" fill="none" />
+                </svg>
+                Back
+            </a>
+            <span>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20">
+                    <circle cx="9" cy="21" r="1"></circle>
+                    <circle cx="20" cy="21" r="1"></circle>
+                    <path d="M3 3h2l2.92 14.58a2 2 0 0 0 1.96 1.42h8a2 2 0 0 0 1.96-1.42L19 7H6"></path>
+                </svg>
+
+                WiseCart</span>
+        </div>
+        <div class="navbar-right">
+            <a href="/logout">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" fill="none" stroke="#aaa" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round" width="22" height="25">
+                    <path d="M18 20H8a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2z"></path>
+                    <polyline points="11 16 15 12 11 8"></polyline>
+                    <line x1="15" y1="12" x2="3" y2="12"></line>
+                </svg>
+                Logout</a>
+            <a href="/wishlist">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 5 24 8" fill="none" stroke="currentColor"
+                    stroke-width="4" stroke-linecap="round" stroke-linejoin="round" width="18" height="22">
+                    <path
+                        d="M12 21.35l-1.45-1.32C5.4 14.25 2 11.1 2 7.25 2 4.42 4.42 2 7.25 2c1.74 0 3.41.81 4.75 2.19C13.34 2.81 15.01 2 16.75 2 19.58 2 22 4.42 22 7.25c0 3.85-3.4 7-8.55 12.8L12 21.35z"
+                        stroke="currentColor" />
+                </svg>
+                Wishlist
+            </a>
+        </div>
+    </nav>
     <div style="height: 100px;"></div>
 
     <div class="container">
@@ -118,11 +233,19 @@
                     <!-- Amazon data rendering -->
                     <% amazonData.forEach(product=> { %>
                         <li>
+                            <svg class="wishlist-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                fill="#edeff1" stroke="currentColor" stroke-width="0.5" stroke-linecap="round"
+                                stroke-linejoin="round" width="24" height="24">
+                                <path
+                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+                                </path>
+                            </svg>
                             <img src="<%= product.image_url %>" alt="<%= product.title %>">
                             <div>
                                 <h3>
                                     <%= product.title %>
                                 </h3>
+
                                 <p>
                                     <%= product.price %>
                                 </p>
@@ -134,94 +257,145 @@
             </div>
         </div>
 
-        <% if (myntraData && myntraData.length > 0) { %> 
+        <% if (myntraData && myntraData.length> 0) { %>
             <div id="myntra-results" class="column">
                 <div class="column-header">Myntra Results</div>
                 <div class="column-content">
                     <ul>
                         <!-- Myntra data rendering -->
-                        <% myntraData.forEach(product => { %>
+                        <% myntraData.forEach(product=> { %>
                             <li>
+                                <svg class="wishlist-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                    fill="#edeff1" stroke="currentColor" stroke-width="0.5" stroke-linecap="round"
+                                    stroke-linejoin="round" width="24" height="24">
+                                    <path
+                                        d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+                                    </path>
+                                </svg>
                                 <img src="<%= product.image_url %>" alt="<%= product.title %>">
                                 <div>
-                                    <h3><%= product.title %></h3>
-                                    <p><%= product.price %></p>
+
+                                    <h3>
+                                        <%= product.title %>
+                                    </h3>
+                                    <p>
+                                        <%= product.price %>
+                                    </p>
                                     <a href="<%= product.url %>" target="_blank">View Details</a>
                                 </div>
                             </li>
-                        <% }) %>
+                            <% }) %>
                     </ul>
                 </div>
             </div>
-        <% } %>
-        
+            <% } %>
 
-        <div class="column">
-            <div class="column-header">Flipkart Results</div>
-            <div class="column-content">
-                <ul>
-                    <!-- Flipkart data rendering -->
-                    <% flipkartData.forEach(product=> { %>
-                        <li>
-                            <img src="<%= product.image_url %>" alt="<%= product.title %>">
-                            <div>
-                                <h3>
-                                    <%= product.title %>
-                                </h3>
-                                <p>
-                                    <%= product.price %>
-                                </p>
-                                <a href="<%= product.url %>" target="_blank">View Details</a>
-                            </div>
-                        </li>
-                        <% }) %>
-                </ul>
-            </div>
-        </div>
+
+                <div class="column">
+                    <div class="column-header">Flipkart Results</div>
+                    <div class="column-content">
+                        <ul>
+                            <!-- Flipkart data rendering -->
+                            <% flipkartData.forEach(product=> { %>
+                                <li>
+                                    <svg class="wishlist-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                        fill="#edeff1" stroke="currentColor" stroke-width="0.5" stroke-linecap="round"
+                                        stroke-linejoin="round" width="24" height="24">
+                                        <path
+                                            d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+                                        </path>
+                                    </svg>
+                                    <img src="<%= product.image_url %>" alt="<%= product.title %>">
+                                    <div>
+                                        <h3>
+                                            <%= product.title %>
+                                        </h3>
+                                        <p>
+                                            <%= product.price %>
+                                        </p>
+                                        <a href="<%= product.url %>" target="_blank">View Details</a>
+                                    </div>
+                                </li>
+                                <% }) %>
+                        </ul>
+                    </div>
+                </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const wishlistIcons = document.querySelectorAll('.wishlist-icon');
+            wishlistIcons.forEach(icon => {
+                icon.addEventListener('click', async (event) => {
+                    event.stopPropagation(); // Stop event propagation to prevent accidental redirection
+
+                    const productDetails = icon.parentElement;
+                    const userId = '<%= userId %>';
+                    const name = productDetails.querySelector('h3').textContent;
+                    const price = productDetails.querySelector('p').textContent;
+                    const link = productDetails.querySelector('a').href;
+                    const image_link = productDetails.querySelector('img').src;
+
+                    const isPink = icon.style.fill === 'rgb(255, 65, 108)'; 
+                    // alert(isPink);
+                    // alert(icon.style.fill);
+
+                    try {
+                        if (!isPink) {
+                            const response = await fetch('/wishlist/add', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({ userId, name, price, link, image_link }) 
+                            });
+                            if (response.ok) {
+                                const responseData = await response.json();
+                                if (responseData.success) {
+                                    const productId = responseData.productId; 
+                                    icon.dataset.productId = productId; 
+                                    icon.style.fill = '#FF416c';
+                                    alert('Product added to wishlist successfully!');
+                                } else {
+                                    alert(responseData.message);
+                                }
+                            } else {
+                                alert('Failed to add product to wishlist.');
+                            }
+
+                        } else {
+                            const productId = icon.dataset.productId; 
+                            const response = await fetch('/wishlist/remove', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({ userId, productId }) 
+                            });
+                            if (response.ok) {
+                                icon.style.fill = '#edeff1'; 
+                                alert('Product removed from wishlist.');
+                            } else {
+                                alert('Failed to remove product from wishlist.');
+                            }
+                            icon.addEventListener('mouseover', () => {
+                                icon.style.fill = '#FF416c'; 
+                            });
+
+                            icon.addEventListener('mouseout', () => {
+                                icon.style.fill = '#edeff1'; 
+                            });
+
+                        }
+                    } catch (error) {
+                        console.error('Error:', error);
+                        alert('Failed to perform wishlist action.');
+                    }
+                });
+            });
+        });
+
+    </script>
 </body>
 
 </html>
 
-
-
-
-
-
-
-
-
-
-
-
-
-<!-- results.html
-<html>
-<body>
-    <div>
-        <h2>Amazon Results</h2>
-        <ul>
-            <% amazonData.forEach(product => { %>
-                <li>
-                    <h3><%= product.title %></h3>
-                    <p><%= product.price %></p>
-                    <a href="<%= product.url %>" target="_blank">View Details</a>
-                </li>
-            <% }) %>
-        </ul>
-    </div>
-
-    <div>
-        <h2>Flipkart Results</h2>
-        <ul>
-            <% flipkartData.forEach(product => { %>
-                <li>
-                    <h3><%= product.title %></h3>
-                    <p><%= product.price %></p>
-                    <a href="<%= product.url %>" target="_blank">View Details</a>
-                </li>
-            <% }) %>
-        </ul>
-    </div>
-</body>
-</html> -->

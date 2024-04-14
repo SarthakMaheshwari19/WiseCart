@@ -131,7 +131,8 @@ async function getScrapedData(apiEndpoint, search_term) {
 async function getFlightData(apiEndpoint,params){
     try {
         const response =await axios.get(apiEndpoint,{ params });
-        response.data;
+        console.log('sex kardunga pata bhi nhi chalega',response.data)
+        return (response.data);
     } catch (error){
         console.error(`Error fetching data from ${apiEndpoint}:`, error.message);
         return [];

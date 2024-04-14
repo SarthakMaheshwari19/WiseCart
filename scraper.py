@@ -431,96 +431,97 @@ try:
 
 
 
+    # Add try-except block in the Paytm Flights scraping route to handle exceptions
+
     @retry(RequestException, tries=3, delay=2, backoff=2)
     @app.route('/paytmflights')
     def get_paytmflights_results():
-        origin = request.args.get('origin')
-        destination = request.args.get('destination')
-        departureDate = request.args.get('formattedDepartureDate')
+         origin = request.args.get('origin')
+         destination = request.args.get('destination')
+         departureDate = request.args.get('formattedDepartureDate')
 
-        # Get city codes from the dictionary
-        origin_code = city_codes.get(origin)
-        destination_code = city_codes.get(destination)
-
-        if not origin_code or not destination_code:
+         # Get city codes from the dictionary
+         origin_code = city_codes.get(origin)
+         destination_code = city_codes.get(destination)
+         if not origin_code or not destination_code:
             return jsonify({"error": "City code not found in the dictionary."})
-        print(1)
-        # Adjust URL with city codes
-        url = f"https://flight.easemytrip.com/FlightList/Index?srch={origin_code}-{origin}-India|{destination_code}-{destination}-India|{departureDate}&px=1-0-0&cbn=0&ar=undefined&isow=true&isdm=true&lang=en-us&_gl=1*1ctplya*_ga*NjU5NDM4ODc1LjE3MTI3NjgzMzk.*_ga_328ZMQHY8M*MTcxMjc2ODMzOS4xLjEuMTcxMjc2ODQ1Mi42MC4wLjA.&IsDoubleSeat=false&CCODE=IN&curr=INR&apptype=B2C"
 
-        # Set up Edge options
-        edge_options = Options()
-        edge_options.add_argument("--headless")  # Run Edge in headless mode
+         try:
 
-        # Create a new instance of the Edge driver
-        driver_path = "C:\\Users\\sarth\\Downloads\\edgedriver_win64(3)\\msedgedriver.exe"
-        service = Service(executable_path=driver_path)
 
-        # Create a new instance of the Edge driver
-        driver = webdriver.Edge(service=service, options=edge_options)
+             # Adjust URL with city codes
+             url = f"https://flight.easemytrip.com/FlightList/Index?srch={origin_code}-{origin}-India|{destination_code}-{destination}-India|{departureDate}&px=1-0-0&cbn=0&ar=undefined&isow=true&isdm=true&lang=en-us&_gl=1*1ctplya*_ga*NjU5NDM4ODc1LjE3MTI3NjgzMzk.*_ga_328ZMQHY8M*MTcxMjc2ODMzOS4xLjEuMTcxMjc2ODQ1Mi42MC4wLjA.&IsDoubleSeat=false&CCODE=IN&curr=INR&apptype=B2C"
 
-        # Navigate to the URL
-        driver.get(url)
+             # Set up Edge options
+             edge_options = Options()
+             edge_options.add_argument("--headless")  # Run Edge in headless mode
 
-        # Wait for the page to load (adjust the delay if needed)
-        time.sleep(4)
+             # Create a new instance of the Edge driver
+             driver_path = "C:\\Users\\sarth\\Downloads\\edgedriver_win64(3)\\msedgedriver.exe"
+             service = Service(executable_path=driver_path)
 
-        # Get the page source after JavaScript rendering
-        html = driver.page_source
+             # Create a new instance of the Edge driver
+             driver = webdriver.Edge(service=service, options=edge_options)
 
-        # Parse the HTML with BeautifulSoup
-        soup = BeautifulSoup(html, "html.parser")
+             # Navigate to the URL
+             driver.get(url)
 
-        # Extract flight details using the updated CSS selectors
-        results = []
-        flight_data = soup.find_all("div", {"class": "row no-margn fltResult ng-scope"})
-        if flight_data:
-            print(1)
-        for flight in flight_data:
-            print(2)
-            airline_element = flight.select_one("div.col-md-7.col-sm-7.padd-lft.airl-txt-n > span.txt-r4.ng-binding")
-            airline = airline_element.text if hasattr(airline_element, 'text') else ""
+             # Wait for the page to load (adjust the delay if needed)
+             time.sleep(4)
 
-            departure_time_element = flight.select_one("div.col-md-2.col-sm-2.col-xs-4.top5 > span.txt-r2-n.ng-binding")
-            departure_time = departure_time_element.text if hasattr(departure_time_element, 'text') else ""
+             # Get the page source after JavaScript rendering
+             html = driver.page_source
 
-            arrival_time_element = flight.select_one("div.col-md-2.col-sm-2.col-xs-3.top5.txdir > span.txt-r2-n.ng-binding")
-            arrival_time = arrival_time_element.text if hasattr(arrival_time_element, 'text') else ""
+             # Parse the HTML with BeautifulSoup
+             soup = BeautifulSoup(html, "html.parser")
 
-            duration_element = flight.select_one("div.col-md-2.col-sm-2.col-xs-5.non-st > span.dura_md.ng-binding")
-            duration = duration_element.text if hasattr(duration_element, 'text') else ""
+             # Extract flight details using the updated CSS selectors
+             results = []
+             flight_data = soup.find_all("div", {"class": "row no-margn fltResult ng-scope"})
+             if flight_data:
+                 print(1)
+             for flight in flight_data:
+                 print(2)
+                 airline_element = flight.select_one("div.col-md-7.col-sm-7.padd-lft.airl-txt-n > span.txt-r4.ng-binding")
+                 airline = airline_element.text if hasattr(airline_element, 'text') else ""
 
-            price_element = flight.select_one("div.col-md-2.col-sm-2.col-xs-5.mr5.cle > div.txt-r6-n.ng-scope > span.ng-binding")
-            price = price_element.text if hasattr(price_element, 'text') else ""
+                 departure_time_element = flight.select_one("div.col-md-2.col-sm-2.col-xs-4.top5 > span.txt-r2-n.ng-binding")
+                 departure_time = departure_time_element.text if hasattr(departure_time_element, 'text') else ""
 
-            print(airline)
+                 arrival_time_element = flight.select_one("div.col-md-2.col-sm-2.col-xs-3.top5.txdir > span.txt-r2-n.ng-binding")
+                 arrival_time = arrival_time_element.text if hasattr(arrival_time_element, 'text') else ""
 
-            # airline = flight.find("div", {"class": "col-md-7 col-sm-7 padd-lft airl-txt-n"}).find("span", {"class": "txt-r4 ng-binding"}).text
-            # departure_time = flight.find("div", {"class": "col-md-2 col-sm-2 col-xs-4 top5"}).find("span", {"class": "txt-r2-n ng-binding"}).text
-            # arrival_time = flight.find("div", {"class": "col-md-2 col-sm-2 col-xs-3 top5 txdir"}).find("span", {"class": "txt-r2-n ng-binding"}).text
-            # duration = flight.find("div", {"class": "col-md-2 col-sm-2 col-xs-5 non-st"}).find("span", {"class": "dura_md ng-binding"}).text
-            # price = flight.find("div", {"class": "col-md-2 col-sm-2 col-xs-5 mr5 cle"}).find("div", {"class": "txt-r6-n ng-scope"}).find("span", {"class": "ng-binding"}).text
-            # if price is None:
-            #     price_element = flight.find("div", {"class": "col-md-2 col-sm-2 col-xs-5 mr5 cle"}).find("span", {"class": "ng-binding"})
-            #     price = price_element.text if price_element else None
+                 duration_element = flight.select_one("div.col-md-2.col-sm-2.col-xs-5.non-st > span.dura_md.ng-binding")
+                 duration = duration_element.text if hasattr(duration_element, 'text') else ""
 
-            booking_url = url
+                 price_element = flight.select_one("div.col-md-2.col-sm-2.col-xs-5.mr5.cle > div.txt-r6-n.ng-scope > span.ng-binding")
+                 price = price_element.text if hasattr(price_element, 'text') else ""
 
-            flight_details = {
-                "airline": airline,
-                "origin": origin,
-                "destination": destination,
-                "departureTime": departure_time,
-                "arrivalTime": arrival_time,
-                "duration": duration,
-                "price": price,
-                "bookingUrl": booking_url
-            }
+                 print(airline)
 
-            results.append(flight_details)
-            print(results)
+                 booking_url = url
+
+                 flight_details = {
+                     "airline": airline,
+                     "origin": origin,
+                     "destination": destination,
+                     "departureTime": departure_time,
+                     "arrivalTime": arrival_time,
+                     "duration": duration,
+                     "price": price,
+                     "bookingUrl": booking_url
+                    }
+
+                 results.append(flight_details)
+                 print(results)
+             return jsonify(results)
+
+         except Exception as e:
+            print("Error occurred during scraping: ", e)
+            return jsonify([])
+
+         finally:
             driver.quit()
-        return jsonify(results)
 
 
 
@@ -578,6 +579,7 @@ except Exception as e:
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5001, debug=True)  # Run on a different port than the Node.js app
+
 
 
 

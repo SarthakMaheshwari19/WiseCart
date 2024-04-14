@@ -134,6 +134,7 @@
             flex: 1;
             overflow-y: auto;
             padding: 20px;
+            overflow-x: hidden;
         }
 
         ul {
@@ -288,7 +289,7 @@
                     </ul>
                 </div>
             </div>
-            <% } %>
+        <% } %>
 
 
                 <div class="column">
@@ -320,6 +321,54 @@
                         </ul>
                     </div>
                 </div>
+
+        
+
+        <% if (paytmFlightsData && paytmFlightsData.length > 0) { %>
+            <div id="paytmFlights-results" class="column">
+                <div class="column-header">Paytm Flights Results</div>
+                <div class="column-content">
+                    <ul>
+                        <% paytmFlightsData.forEach(flight => { %>
+                            <li>
+                                <div>
+                                    <h3><%= flight.airline %></h3>
+                                    <p>Origin: <%= flight.origin %> | Destination: <%= flight.destination %></p>
+                                    <p>Departure: <%= flight.departureTime %> | Arrival: <%= flight.arrivalTime %></p>
+                                    <p>Duration: <%= flight.duration %></p>
+                                    <p>Price: <%= flight.price %></p>
+                                    <a href="<%= flight.bookingUrl %>" target="_blank">View Details</a>
+                                </div>
+                            </li>
+                        <% }) %>
+                    </ul>
+                </div>
+            </div>
+        <% } %>
+                
+        <% if (makemytripData && makemytripData.length > 0) { %>
+            <div id="makemytrip-results" class="column">
+                <div class="column-header">MakeMyTrip Results</div>
+                <div class="column-content">
+                    <ul>
+                        <% makemytripData.forEach(flight => { %>
+                            <li>
+                                <div>
+                                    <h3><%= flight.airline %></h3>
+                                    <p>Origin: <%= flight.origin %> | Destination: <%= flight.destination %></p>
+                                    <p>Departure: <%= flight.departureTime %> | Arrival: <%= flight.arrivalTime %></p>
+                                    <p>Duration: <%= flight.duration %></p>
+                                    <p>Price: <%= flight.price %></p>
+                                    <a href="<%= flight.bookingUrl %>" target="_blank">View Details</a>
+                                </div>
+                            </li>
+                        <% }) %>
+                    </ul>
+                </div>
+            </div>
+        <% } %>
+
+
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -335,7 +384,7 @@
                     const link = productDetails.querySelector('a').href;
                     const image_link = productDetails.querySelector('img').src;
 
-                    const isPink = icon.style.fill === 'rgb(255, 65, 108)'; 
+                    const isPink = icon.style.fill === 'rgb(255, 65, 108)';
                     // alert(isPink);
                     // alert(icon.style.fill);
 
@@ -346,13 +395,13 @@
                                 headers: {
                                     'Content-Type': 'application/json'
                                 },
-                                body: JSON.stringify({ userId, name, price, link, image_link }) 
+                                body: JSON.stringify({ userId, name, price, link, image_link })
                             });
                             if (response.ok) {
                                 const responseData = await response.json();
                                 if (responseData.success) {
-                                    const productId = responseData.productId; 
-                                    icon.dataset.productId = productId; 
+                                    const productId = responseData.productId;
+                                    icon.dataset.productId = productId;
                                     icon.style.fill = '#FF416c';
                                     alert('Product added to wishlist successfully!');
                                 } else {
@@ -363,26 +412,26 @@
                             }
 
                         } else {
-                            const productId = icon.dataset.productId; 
+                            const productId = icon.dataset.productId;
                             const response = await fetch('/wishlist/remove', {
                                 method: 'POST',
                                 headers: {
                                     'Content-Type': 'application/json'
                                 },
-                                body: JSON.stringify({ userId, productId }) 
+                                body: JSON.stringify({ userId, productId })
                             });
                             if (response.ok) {
-                                icon.style.fill = '#edeff1'; 
+                                icon.style.fill = '#edeff1';
                                 alert('Product removed from wishlist.');
                             } else {
                                 alert('Failed to remove product from wishlist.');
                             }
                             icon.addEventListener('mouseover', () => {
-                                icon.style.fill = '#FF416c'; 
+                                icon.style.fill = '#FF416c';
                             });
 
                             icon.addEventListener('mouseout', () => {
-                                icon.style.fill = '#edeff1'; 
+                                icon.style.fill = '#edeff1';
                             });
 
                         }
@@ -398,4 +447,3 @@
 </body>
 
 </html>
-

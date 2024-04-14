@@ -67,24 +67,51 @@ app.get('/', (req, res) => {
 });
 
 app.post('/search', async (req, res) => {
-    const search_term = req.body.search;
+    console.log(req.body)
+    // const search_term = req.body.search;
     const category = req.body.category;
-    let myntraData=[]
-    const amazonData = await getScrapedData('http://127.0.0.1:5001/amazon', search_term);
-    // console.log('Amazon Data:', amazonData);
+    let myntraData = [];
+    let amazonData = [];
+    let flipkartData = [];
+    let paytmFlightsData = [];
+    let makemytripData = [];
 
-    const flipkartData = await getScrapedData('http://127.0.0.1:5001/flipkart', search_term);
-    // console.log('Flipkart Data:', flipkartData);
+    if (category === 'electronics' || category === 'lifestyle') {
+        const search_term = req.body.search;
+        amazonData = await getScrapedData('http://127.0.0.1:5001/amazon', search_term);
+        flipkartData = await getScrapedData('http://127.0.0.1:5001/flipkart', search_term);
 
-    if (category === 'lifestyle') { 
-         myntraData = await getScrapedData('http://127.0.0.1:5001/myntra', search_term);
-        // console.log('Myntra Data:',myntraData);
+        if (category === 'lifestyle') {
+            myntraData = await getScrapedData('http://127.0.0.1:5001/myntra', search_term);
+        }
+    } else if (category === 'flights') {
+        const origin = req.body.origin;
+        const destination = req.body.destination;
+        const departureDate = new Date(req.body.departureDate);
+        const formattedDepartureDate = `${departureDate.getDate()}/${departureDate.getMonth() + 1}/${departureDate.getFullYear()}`;
+
+        paytmFlightsData = await getFlightData('http://127.0.0.1:5001/paytmflights', { origin, destination, formattedDepartureDate });
+        console.log('paytm flights Data:', paytmFlightsData);
+        makemytripData = await getFlightData('http://127.0.0.1:5001/makemytrip', { origin, destination, formattedDepartureDate });
+        console.log('make my trip flights Data:', makemytripData);
     }
-    // Pass userId to the template
+//     const category = req.body.category;
+//     let myntraData=[]
+//     const amazonData = await getScrapedData('http://127.0.0.1:5001/amazon', search_term);
+//     // console.log('Amazon Data:', amazonData);
+
+//     const flipkartData = await getScrapedData('http://127.0.0.1:5001/flipkart', search_term);
+//     // console.log('Flipkart Data:', flipkartData);
+
+//     if (category === 'lifestyle') { 
+//          myntraData = await getScrapedData('http://127.0.0.1:5001/myntra', search_term);
+//         // console.log('Myntra Data:',myntraData);
+//     }
+//     // Pass userId to the template
     const userId = req.session.userId;
     
     // Render the results page with data and userId
-    res.render(path.join(__dirname, 'views', 'results.ejs'), { amazonData, flipkartData, myntraData, userId });
+    res.render(path.join(__dirname, 'views', 'results.ejs'), { amazonData, flipkartData, myntraData, paytmFlightsData, makemytripData, userId });
 });
 
 app.get('/goBack', (req, res) => {
@@ -101,6 +128,16 @@ async function getScrapedData(apiEndpoint, search_term) {
         return [];
     }
 }
+async function getFlightData(apiEndpoint,params){
+    try {
+        const response =await axios.get(apiEndpoint,{ params });
+        response.data;
+    } catch (error){
+        console.error(`Error fetching data from ${apiEndpoint}:`, error.message);
+        return [];
+    }
+}
+
 
 app.post('/wishlist/add', async (req, res) => {
     const userId = req.session.userId;

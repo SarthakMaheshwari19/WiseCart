@@ -19,68 +19,157 @@ from selenium.webdriver.support import expected_conditions as EC
 
 app = Flask(__name__)
 CORS(app)
+# headers = {
+#     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36 Edg/122.0.2365.52'
+# }
+
+# try:
+#     @retry(RequestException, tries=3, delay=3, backoff=2)
+#     @app.route('/amazon')
+#     def get_amazon_results():
+#         search_term = request.args.get('term') 
+#         url = f"https://www.amazon.in/s?k={search_term}"
+#         response = requests.get(url, headers=headers)
+
+#         if response.status_code == 200:
+#             # Parse HTML
+#             soup = BeautifulSoup(response.content, 'html.parser')
+#             # Initialize results
+#             results = []
+
+#             # Extract data from search results
+#             for item in soup.select('div[data-asin][data-component-type="s-search-result"]'):
+                
+#                 brand_element = item.select_one('span.a-size-base-plus.a-color-base') 
+
+#                 title_element = item.select_one('span.a-size-base-plus.a-color-base.a-text-normal')
+#                 if title_element is None:
+#                     title_element = item.select_one('span.a-size-medium.a-color-base.a-text-normal')
+                
+#                 print(title_element)
+#                 print("1")
+#                 price_element = item.select_one('span.a-price > span.a-offscreen')
+#                 if price_element is None:
+#                     price_element = item.select_one('spam.a-price-whole')
+               
+#                 print(title_element)
+#                 url_element = item.select_one('a.a-link-normal.s-no-outline')['href']
+#                 if url_element is None:
+#                     url_element = item.select_one('a.a-link-normal.s-underline-text.s-underline-link-text.s-link-style.a-text-normal')['href']
+               
+#                 print(url_element)
+#                 image_element = item.select_one('img.s-image')
+#                 image_url = image_element['src'] if image_element else None
+
+#                 print(image_url)
+#                 print("4")
+
+#                 if title_element and price_element and url_element:
+#                     title = title_element.text if hasattr(title_element, 'text') else ""
+#                     if brand_element:
+#                         brand = brand_element.text if hasattr(brand_element, 'text') else ""
+#                         title = f'{brand} - {title}'
+#                     price = price_element.text if hasattr(price_element, 'text') else ""
+#                     url = url_element
+
+#                     # Construct product object
+#                     product = {
+#                         "title": title,
+#                         "price": price, 
+#                         "url": f'https://www.amazon.in{url}',
+#                         "image_url": image_url
+#                     }   
+
+#                     # Append to results
+#                     results.append(product)
+#                 else:
+#                     print("Skipping incomplete result")
+
+#             return jsonify(results)
+    
+#         else:
+#             print('Amazon request failed')
+#             return []
+
 headers = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36 Edg/91.0.864.48'
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36 Edg/123.0.2420.81'
 }
 
 try:
     @retry(RequestException, tries=3, delay=2, backoff=2)
     @app.route('/amazon')
     def get_amazon_results():
-        search_term = request.args.get('term') 
-        url = f"https://www.amazon.in/s?k={search_term}"
-        response = requests.get(url, headers=headers)
 
-        if response.status_code == 200:
-            # Parse HTML
-            soup = BeautifulSoup(response.content, 'html.parser')
-            # Initialize results
-            results = []
+        search_term = request.args.get('term')
+        service = Service(r"C:\Users\sarth\Downloads\edgedriver_win64(3)\msedgedriver.exe")
+        driver = webdriver.Edge(service=service)
+        link=f"https://www.amazon.in/s?k={search_term}"
+        driver.get(link)
+        time.sleep(1)
+        response = driver.execute_script("return document.readyState")
+        print(response) 
+        try:
+            response = driver.execute_script("return document.readyState")
+            print(response)
+            if response == "complete":
+                # driver.quit()
+            # if (1):
+            # if response.status_code == 200:
+                # Parse HTML
+                soup = BeautifulSoup(driver.page_source, 'html.parser')  
+                results = []
+                print('hello')
+                # Extract data from search results
+                for item in soup.select('div[data-asin][data-component-type="s-search-result"]'):
+                    
+                    brand_element = item.select_one('span.a-size-base-plus.a-color-base') 
 
-            # Extract data from search results
-            for item in soup.select('div[data-asin][data-component-type="s-search-result"]'):
+                    title_element = item.select_one('span.a-size-base-plus.a-color-base.a-text-normal')
+                    if title_element is None:
+                        title_element = item.select_one('span.a-size-medium.a-color-base.a-text-normal')
+                    
+                    price_element = item.select_one('span.a-price > span.a-offscreen')
+                    url_element = item.select_one('a.a-link-normal.s-no-outline')['href']
+                    if url_element is None:
+                        url_element = item.select_one('a.a-link-normal.s-underline-text.s-underline-link-text.s-link-style.a-text-normal')['href']
+
+                    image_element = item.select_one('img.s-image')
+                    image_url = image_element['src'] if image_element else None
                 
-                brand_element = item.select_one('span.a-size-base-plus.a-color-base') 
 
-                title_element = item.select_one('span.a-size-base-plus.a-color-base.a-text-normal')
-                if title_element is None:
-                    title_element = item.select_one('span.a-size-medium.a-color-base.a-text-normal')
-                
-                price_element = item.select_one('span.a-price > span.a-offscreen')
-                url_element = item.select_one('a.a-link-normal.s-no-outline')['href']
-                if url_element is None:
-                    url_element = item.select_one('a.a-link-normal.s-underline-text.s-underline-link-text.s-link-style.a-text-normal')['href']
+                    if title_element and price_element and url_element:
+                        title = title_element.text if hasattr(title_element, 'text') else ""
+                        if brand_element:
+                            brand = brand_element.text if hasattr(brand_element, 'text') else ""
+                            title = f'{brand} - {title}'
+                        price = price_element.text if hasattr(price_element, 'text') else ""
+                        url = url_element
 
-                image_element = item.select_one('img.s-image')
-                image_url = image_element['src'] if image_element else None
+                        # Construct product object
+                        product = {
+                            "title": title,
+                            "price": price, 
+                            "url": f'https://www.amazon.in{url}',
+                            "image_url": image_url
+                        }   
+
+                        # Append to results
+                        results.append(product)
+                    else:
+                        print("Skipping incomplete result")
+
+                return jsonify(results)
             
-
-                if title_element and price_element and url_element:
-                    title = title_element.text if hasattr(title_element, 'text') else ""
-                    if brand_element:
-                        brand = brand_element.text if hasattr(brand_element, 'text') else ""
-                        title = f'{brand} - {title}'
-                    price = price_element.text if hasattr(price_element, 'text') else ""
-                    url = url_element
-
-                    # Construct product object
-                    product = {
-                        "title": title,
-                        "price": price, 
-                        "url": f'https://www.amazon.in{url}',
-                        "image_url": image_url
-                    }   
-
-                    # Append to results
-                    results.append(product)
-                else:
-                    print("Skipping incomplete result")
-
-            return jsonify(results)
-    
-        else:
-            print('Amazon request failed')
+        except Exception as e:
+            print("Error parsing page: ", e)
             return []
+
+        finally:
+            driver.quit()
+    
+        # else:
+        #     print('Amazon request failed')
+        #     return []
         
     @retry(RequestException, tries=3, delay=2, backoff=2)
     @app.route('/myntra')
@@ -91,7 +180,7 @@ try:
         # options.add_argument('--headless')
 
 
-        service = Service(r"C:\Users\sarth\Downloads\edgedriver_win64\msedgedriver.exe")
+        service = Service(r"C:\Users\sarth\Downloads\edgedriver_win64(3)\msedgedriver.exe")
         driver = webdriver.Edge(service=service)
         link=f"https://www.myntra.com/{search_term}"
         driver.get(link)
@@ -173,13 +262,14 @@ try:
         #     return []
 
     
-    @retry(RequestException, tries=3, delay=2, backoff=2)
+    # @retry(RequestException, tries=3, delay=2, backoff=2)
     @app.route('/flipkart')
     def get_flipkart_results():
         search_term = request.args.get('term') 
-        url = f"https://www.flipkart.com/search?q={search_term}"
+        url = f"https://www.flipkart.com/search?q={search_term}&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off"
+
         headers_flipkart = {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36 Edg/91.0.864.48',
+            'User-Agent': 'Edg/123.0.2420.81',
             'Accept-Language': 'en-US,en;q=0.9',
             'Accept-Encoding': 'gzip, deflate, br',
             'Referer': 'https://www.flipkart.com/',
@@ -302,7 +392,185 @@ try:
 
         else:
             print('Flipkart request failed')
+            print(response.status_code)
             return []
+    
+
+    city_codes = {
+    "Agartala": "IXA", "Agatti": "AGX", "Agra": "AGR", "Akola": "AKD",
+    "Allahabad": "IXD", "Along": "IXV", "Ambala": "IXD", "Aurangabad": "IXU",
+    "Siliguri": "IXB", "Bareilly": "BEK", "Hyderabad": "BPM", "Belgaum": "IXG",
+    "Bellary": "BEP", "Bathinda": "BUP", "Bhavnagar": "BHU", "Bhuj": "BHJ",
+    "Bidar": "BDR", "Bhubaneswar": "BBI", "Bilaspur": "PAB", "Ranchi": "IXR",
+    "Calicut": "CCJ", "Car Nicobar": "CBD", "Chandigarh": "IXC", "Lucknow": "LKO",
+    "Chennai": "MAA", "Mumbai": "BOM", "Kochi": "COK", "Coimbatore": "CJB",
+    "Vasco da Gama": "GOI", "Daman": "NMB", "Dehradun": "DED", "Indore": "IDR",
+    "Dhanbad": "DBD", "Dibrugarh": "DIB", "Dimapur": "DMU", "Nagpur": "NAG",
+    "Gaya": "GAY", "Gorakhpur": "GOP", "Gwalior": "GWL",
+    "Bangalore": "BLR", "Jalpaiguri": "IXB", "Hisar": "HSS", "Hubli": "HBX",
+    "Imphal": "IMF", "New Delhi": "DEL", "Jabalpur": "JLR", "Jaipur": "JAI",
+    "Jaisalmer": "JSA", "Bengaluru": "BLR", "Jammu": "IXJ", "Jamnagar": "JGA",
+    "Jodhpur": "JDH", "Jorhat": "JRH", "Kadapa": "CDP", "Bhutan": "BHU",
+    "Leh": "IXL", "Aizawl": "AJL", "Patna": "PAT", "Guwahati": "GAU",
+    "Ludhiana": "LUH", "Madurai": "IXM", "Udaipur": "UDR", "Mangalore": "IXE",
+    "Latur": "LTU", "Varanasi": "VNS", "Aizawl": "AJL",
+    "Patna": "PAT", "Guwahati": "GAU", "Ludhiana": "LUH", "Madurai": "IXM",
+    "Udaipur": "UDR", "Mangalore": "IXE", "Pune": "PNQ", "Bhopal": "BHO",
+    "Rajahmundry": "RJA", "Hyderabad": "HYD", "Rajkot": "RAJ", "Ratnagiri": "RTC",
+    "Rewa": "REW", "Rourkela": "RRK", "Salem": "SXV",
+    "Ahmedabad": "AMD", "Srinagar": "SXR", "Shillong": "SHL", "Shirdi": "SAG",
+    "Silchar": "IXS", "Solapur": "SSE", "Jamshedpur": "IXW",
+    "Amritsar": "ATQ", "Puttaparthi": "PUT", "Surat": "STV", "Tezpur": "TEZ",
+    "Tiruchirappally": "TRZ", "Thiruvananthapuram": "TRV",
+    "Vijayawada": "VGA", "Port Blair": "IXZ", "Ziro": "ZER",
+    "Kolkata": "CCU",
+    }
+
+
+
+
+
+
+    @retry(RequestException, tries=3, delay=2, backoff=2)
+    @app.route('/paytmflights')
+    def get_paytmflights_results():
+        origin = request.args.get('origin')
+        destination = request.args.get('destination')
+        departureDate = request.args.get('formattedDepartureDate')
+
+        # Get city codes from the dictionary
+        origin_code = city_codes.get(origin)
+        destination_code = city_codes.get(destination)
+
+        if not origin_code or not destination_code:
+            return jsonify({"error": "City code not found in the dictionary."})
+        print(1)
+        # Adjust URL with city codes
+        url = f"https://flight.easemytrip.com/FlightList/Index?srch={origin_code}-{origin}-India|{destination_code}-{destination}-India|{departureDate}&px=1-0-0&cbn=0&ar=undefined&isow=true&isdm=true&lang=en-us&_gl=1*1ctplya*_ga*NjU5NDM4ODc1LjE3MTI3NjgzMzk.*_ga_328ZMQHY8M*MTcxMjc2ODMzOS4xLjEuMTcxMjc2ODQ1Mi42MC4wLjA.&IsDoubleSeat=false&CCODE=IN&curr=INR&apptype=B2C"
+
+        # Set up Edge options
+        edge_options = Options()
+        edge_options.add_argument("--headless")  # Run Edge in headless mode
+
+        # Create a new instance of the Edge driver
+        driver_path = "C:\\Users\\sarth\\Downloads\\edgedriver_win64(3)\\msedgedriver.exe"
+        service = Service(executable_path=driver_path)
+
+        # Create a new instance of the Edge driver
+        driver = webdriver.Edge(service=service, options=edge_options)
+
+        # Navigate to the URL
+        driver.get(url)
+
+        # Wait for the page to load (adjust the delay if needed)
+        time.sleep(4)
+
+        # Get the page source after JavaScript rendering
+        html = driver.page_source
+
+        # Parse the HTML with BeautifulSoup
+        soup = BeautifulSoup(html, "html.parser")
+
+        # Extract flight details using the updated CSS selectors
+        results = []
+        flight_data = soup.find_all("div", {"class": "row no-margn fltResult ng-scope"})
+        if flight_data:
+            print(1)
+        for flight in flight_data:
+            print(2)
+            airline_element = flight.select_one("div.col-md-7.col-sm-7.padd-lft.airl-txt-n > span.txt-r4.ng-binding")
+            airline = airline_element.text if hasattr(airline_element, 'text') else ""
+
+            departure_time_element = flight.select_one("div.col-md-2.col-sm-2.col-xs-4.top5 > span.txt-r2-n.ng-binding")
+            departure_time = departure_time_element.text if hasattr(departure_time_element, 'text') else ""
+
+            arrival_time_element = flight.select_one("div.col-md-2.col-sm-2.col-xs-3.top5.txdir > span.txt-r2-n.ng-binding")
+            arrival_time = arrival_time_element.text if hasattr(arrival_time_element, 'text') else ""
+
+            duration_element = flight.select_one("div.col-md-2.col-sm-2.col-xs-5.non-st > span.dura_md.ng-binding")
+            duration = duration_element.text if hasattr(duration_element, 'text') else ""
+
+            price_element = flight.select_one("div.col-md-2.col-sm-2.col-xs-5.mr5.cle > div.txt-r6-n.ng-scope > span.ng-binding")
+            price = price_element.text if hasattr(price_element, 'text') else ""
+
+            print(airline)
+
+            # airline = flight.find("div", {"class": "col-md-7 col-sm-7 padd-lft airl-txt-n"}).find("span", {"class": "txt-r4 ng-binding"}).text
+            # departure_time = flight.find("div", {"class": "col-md-2 col-sm-2 col-xs-4 top5"}).find("span", {"class": "txt-r2-n ng-binding"}).text
+            # arrival_time = flight.find("div", {"class": "col-md-2 col-sm-2 col-xs-3 top5 txdir"}).find("span", {"class": "txt-r2-n ng-binding"}).text
+            # duration = flight.find("div", {"class": "col-md-2 col-sm-2 col-xs-5 non-st"}).find("span", {"class": "dura_md ng-binding"}).text
+            # price = flight.find("div", {"class": "col-md-2 col-sm-2 col-xs-5 mr5 cle"}).find("div", {"class": "txt-r6-n ng-scope"}).find("span", {"class": "ng-binding"}).text
+            # if price is None:
+            #     price_element = flight.find("div", {"class": "col-md-2 col-sm-2 col-xs-5 mr5 cle"}).find("span", {"class": "ng-binding"})
+            #     price = price_element.text if price_element else None
+
+            booking_url = url
+
+            flight_details = {
+                "airline": airline,
+                "origin": origin,
+                "destination": destination,
+                "departureTime": departure_time,
+                "arrivalTime": arrival_time,
+                "duration": duration,
+                "price": price,
+                "bookingUrl": booking_url
+            }
+
+            results.append(flight_details)
+            print(results)
+            driver.quit()
+        return jsonify(results)
+
+
+
+    @retry(RequestException, tries=3, delay=2, backoff=2)
+    # MakeMyTrip scraping route
+    @app.route('/makemytrip')
+    def get_makemytrip_results():
+        origin = request.args.get('origin')
+        destination = request.args.get('destination')
+        departureDate = request.args.get('formattedDepartureDate')
+
+        # Get city codes from the dictionary
+        origin_code = city_codes.get(origin)
+        destination_code = city_codes.get(destination)
+
+        # Implement MakeMyTrip scraping logic here
+        url = f"https://www.makemytrip.com/flight/search?{origin_code}-{destination_code}-{departureDate}&tripType=O&paxType=S&prodType=flight"
+        headers = {
+            "User-Agent": "Edg/123.0.2420.81"
+        }
+
+        response = requests.get(url, headers=headers)
+        time.sleep(5)
+        if response.status_code == 200:
+            print(1)
+            soup = BeautifulSoup(response.content, "html.parser")
+            flight_data = soup.find_all("div", {"class": "flightCard"})
+            results = []
+
+            for flight in flight_data:
+                airline = flight.find("span", {"class": "Airways"}).text
+                departure_time = flight.find("span", {"class": "departuretime"}).text
+                arrival_time = flight.find("span", {"class": "arrivaltime"}).text
+                duration = flight.find("span", {"class": "flDuration"}).text
+                price = flight.find("span", {"class": "blackText"}).text
+                print(2)
+                flight_details = {
+                    "airline": airline,
+                    "origin": origin,
+                    "destination": destination,
+                    "departureTime": departure_time,
+                    "arrivalTime": arrival_time,
+                    "duration": duration,
+                    "price": price
+                }
+                results.append(flight_details)
+            print(results)
+            return jsonify(results)
+
+        return jsonify([])
 
 except Exception as e:
     # Print the traceback

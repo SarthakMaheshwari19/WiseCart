@@ -167,8 +167,8 @@
         </div>
         <div class="navbar-right">
             <a href="/logout">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" fill="none" stroke="#aaa"
-                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="22" height="25">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" fill="none" stroke="#aaa" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round" width="22" height="25">
                     <path d="M18 20H8a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2z"></path>
                     <polyline points="11 16 15 12 11 8"></polyline>
                     <line x1="15" y1="12" x2="3" y2="12"></line>
@@ -186,15 +186,57 @@
             </a>
         </div>
     </nav>
+
+
     <form action="/search" method="post">
         <select name="category" required>
             <option value="" disabled selected>Select Category</option>
             <option value="electronics">Electronics</option>
             <option value="lifestyle">Lifestyle</option>
+            <option value="flights">Flights</option>
         </select>
-        <input type="text" name="search" placeholder="Search products" required>
+        <div id="flight-search" style="display: none;">
+            <input type="text" name="origin" placeholder="Origin City">
+            <input type="text" name="destination" placeholder="Destination City">
+            <div style="margin-left: 10px; display: flex;">
+                <label style="margin-right:20px;margin-left: 12px;" for="departureDate">Departure Date:</label>
+                <input type="date" name="departureDate" id="departureDate" placeholder="Departure Date">
+            </div>
+        </div>
+        <div id="product-search" style="display: block;">
+            <input type="text" name="search" placeholder="Search products" id="productSearchInput">
+        </div>
         <button type="submit">Search</button>
     </form>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const form = document.querySelector('form');
+            const categorySelect = document.querySelector('select[name="category"]');
+            const flightSearchSection = document.getElementById('flight-search');
+            const productSearchInput = document.getElementById('productSearchInput');
+            const flightInputs = flightSearchSection.querySelectorAll('input');
+
+            const toggleSections = () => {
+                if (categorySelect.value === 'flights') {
+                    flightSearchSection.style.display = 'block';
+                    productSearchInput.style.display = 'none'; // Hide the product search input field
+                    productSearchInput.disabled = true; // Disable the "search" input field
+                    flightInputs.forEach(input => input.required = true); // Make flight fields required
+                } else {
+                    flightSearchSection.style.display = 'none';
+                    productSearchInput.style.display = ''; // Show the product search input field
+                    productSearchInput.disabled = false; // Enable the "search" input field
+                    flightInputs.forEach(input => input.required = false); // Make flight fields not required
+                }
+            };
+
+            // Initial toggle based on default category
+            toggleSections();
+
+            // Event listener for category change
+            categorySelect.addEventListener('change', toggleSections);
+        });
+    </script>
 </body>
 
 </html>

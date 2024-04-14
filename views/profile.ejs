@@ -1,0 +1,150 @@
+<!-- profile.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Montserrat', sans-serif;
+            background: #f6f5f7;
+        }
+
+        h1, h2, h3 {
+            color: #FF416C;
+        }
+
+        nav.navbar {
+            margin: 0px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #ff2e5e;
+            border: #FF416C;
+            padding: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-left, .navbar-right {
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-left a, .navbar-right a {
+            margin: 0 20px;
+            text-decoration: none;
+            color: #fff;
+            font-weight: bold;
+            font-size: 18px;
+            transition: color 0.3s;
+        }
+
+        .navbar-left a:hover, .navbar-right a:hover {
+            color: #A8C0FF;
+        }
+
+        .profile-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            height: calc(100vh - 60px); /* Adjusted height considering navbar */
+            padding: 30px;
+        }
+
+        .edit-button {
+            background: #FF4B2B;
+            color: #fff;
+            font-size: 18px;
+            font-weight: bold;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+            width: 200px; /* Fixed width for alignment */
+        }
+
+        .edit-button:hover {
+            background: #FF416C;
+        }
+
+        .big-container {
+            background: #fefefe;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="navbar-left">
+            <!-- Placeholder for left navbar content, similar to wishlist.ejs -->
+            <a href="/">Home</a>
+        </div>
+        <div class="navbar-right">
+            <!-- Placeholder for right navbar content, similar to wishlist.ejs -->
+            <a href="/logout">Logout</a>
+            <a href="/wishlist">Wishlist</a>
+        </div>
+    </nav>
+
+    <div class="profile-container">
+        <div class="big-container">
+            <div>
+                <label for="name">Name:</label>
+                <input type="text" id="name" value="<%= user.name %>">
+                <button class="edit-button" onclick="editName()">Edit Name</button>
+            </div>
+            <div>
+                <label for="email">Email:</label>
+                <input type="email" id="email" value="<%= user.email %>">
+                <button class="edit-button" onclick="editEmail()">Edit Email</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+       function editName() {
+    var name = document.getElementById('name').value;
+    fetch('/profile/update', {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name }),
+    })
+    .then(response => response.text())
+    .then(data => {
+        alert(data);
+    });
+}
+
+function editEmail() {
+    var email = document.getElementById('email').value;
+    fetch('/profile/update', {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+    })
+    .then(response => response.text())
+    .then(data => {
+        alert(data);
+    });
+}
+    </script>
+</body>
+
+</html>

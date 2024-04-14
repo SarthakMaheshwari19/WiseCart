@@ -115,28 +115,73 @@ app.post('/search', async (req, res) => {
         makemytripData = await getFlightData('http://127.0.0.1:5001/makemytrip', { origin, destination, formattedDepartureDate });
         console.log('make my trip flights Data:', makemytripData);
     }
-//     const category = req.body.category;
-//     let myntraData=[]
-//     const amazonData = await getScrapedData('http://127.0.0.1:5001/amazon', search_term);
-//     // console.log('Amazon Data:', amazonData);
-
-//     const flipkartData = await getScrapedData('http://127.0.0.1:5001/flipkart', search_term);
-//     // console.log('Flipkart Data:', flipkartData);
-
-//     if (category === 'lifestyle') { 
-//          myntraData = await getScrapedData('http://127.0.0.1:5001/myntra', search_term);
-//         // console.log('Myntra Data:',myntraData);
-//     }
-//     // Pass userId to the template
     const userId = req.session.userId;
     
     // Render the results page with data and userId
     res.render(path.join(__dirname, 'views', 'results.ejs'), { amazonData, flipkartData, myntraData, paytmFlightsData, makemytripData, userId });
 });
 
-// app.get('/goBack', (req, res) => {
-//     res.redirect('back');
-// });
+// Fetch user data by ID and render profile page with EJS
+app.get('/profile', async (req, res) => {
+    const userid  = req.session.userId;
+    console.log('object',userid)
+    try {
+        const [rows] = await db.promise().query('SELECT * FROM users WHERE id = ?', [userid]);
+        if (rows.length > 0) {
+            res.render('profile', { user: rows[0] });
+        } else {
+            res.status(404).send('User not found');
+        }
+    } catch (error) {
+        console.error('Error fetching user:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+app.put('/profile/update', async (req, res) => {
+    const userId = req.session.userId;
+    const { name, email } = req.body;
+
+    // Filter out null or undefined values
+    const fieldsToUpdate = { name, email };
+    Object.keys(fieldsToUpdate).forEach(key => fieldsToUpdate[key] == null && delete fieldsToUpdate[key]);
+
+    // Build the SET part of the SQL query
+    const setPart = Object.keys(fieldsToUpdate).map(key => `${key} = ?`).join(', ');
+
+    // Build the values array for the query
+    const values = Object.values(fieldsToUpdate);
+    values.push(userId); // Add the userId for the WHERE clause
+
+    try {
+        const [result] = await db.promise().query(`UPDATE users SET ${setPart} WHERE id = ?`, values);
+        if (result.affectedRows > 0) {
+            res.send('User updated successfully');
+        } else {
+            res.status(404).send('User not found');
+        }
+    } catch (error) {
+        console.error('Error updating user:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+// Update user data
+app.put('/profile', async (req, res) => {
+    const userid  = req.session.userId;
+    const { username, email } = req.body; // Assuming you want to update username and email
+    try {
+        const [result] = await db.promise().query('UPDATE users SET username = ?, email = ? WHERE id = ?', [username, email, userid]);
+        if (result.affectedRows > 0) {
+            res.send('User updated successfully');
+        } else {
+            res.status(404).send('User not found');
+        }
+    } catch (error) {
+        console.error('Error updating user:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});
 
 async function getScrapedData(apiEndpoint, search_term) {
     try {
@@ -216,16 +261,6 @@ app.get('/wishlist', async (req, res) => {
     // }
 });
 
-
-
 app.listen(3000, () => {
     console.log('Server is running on http://localhost:3000');
 });
-
-
-
-
-
-
-
-

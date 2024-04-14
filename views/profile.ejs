@@ -83,6 +83,30 @@
             align-items: center;
             gap: 15px;
         }
+
+        .wishlist-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .wishlist-item {
+            background: #fefefe;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            width: 200px; /* Fixed width for alignment */
+        }
+
+        .wishlist-item p {
+            margin: 0;
+            text-align: center;
+        }
     </style>
 </head>
 
@@ -110,6 +134,12 @@
                 <label for="email">Email:</label>
                 <input type="email" id="email" value="<%= user.email %>">
                 <button class="edit-button" onclick="editEmail()">Edit Email</button>
+            </div>
+        </div>
+        <div class="big-container">
+            <h2>Previously Viewed</h2>
+            <div class="wishlist-container">
+                <!-- Previously viewed items will be loaded here -->
             </div>
         </div>
     </div>
@@ -144,6 +174,27 @@ function editEmail() {
         alert(data);
     });
 }
+
+function fetchPreviouslyViewed() {
+    fetch('/profile/prev', {
+        method: 'GET'
+    })
+    .then(response => response.json()) // Expect JSON response
+    .then(data => {
+        const container = document.querySelector('.wishlist-container');
+        container.innerHTML = ''; // Clear existing content
+        data.searchHistory.forEach(term => {
+            const div = document.createElement('div');
+            div.className = 'wishlist-item';
+            div.textContent = term;
+            container.appendChild(div);
+        });
+    })
+    .catch(error => console.error('Failed to fetch previously viewed items:', error));
+}
+
+document.addEventListener('DOMContentLoaded', fetchPreviouslyViewed);
+
     </script>
 </body>
 

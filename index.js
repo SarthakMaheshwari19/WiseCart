@@ -72,9 +72,41 @@ app.get('/', async (req, res) => {
     }
     res.render('index', { searchHistory });
 });
-// app.get('/', (req, res) => {
-//     res.render('index');  
-// });
+
+app.get('/profile/prev', async (req, res) => {
+    const userId = req.session.userId; // Assuming the user's ID is stored in the session
+    let searchHistory = [];
+    try {
+        const [rows] = await db.promise().query('SELECT search_term FROM search_history WHERE user_id = ? ORDER BY search_date DESC LIMIT 10', [userId]);
+        searchHistory = rows.map(row => row.search_term);
+    } catch (error) {
+        console.error('Error fetching search history:', error);
+    }
+    res.json({ searchHistory });
+});
+
+app.get('/logout', (req, res) => {
+    req.session.destroy(err => {
+        if (err) {
+            console.error('Error destroying session:', err);
+        } else {
+            res.redirect('/auth');
+        }
+    });
+});
+
+
+app.get('/', async (req, res) => {
+    const userId = req.session.userId; // Assuming the user's ID is stored in the session
+    let searchHistory = [];
+    try {
+        const [rows] = await db.promise().query('SELECT search_term FROM search_history WHERE user_id = ? ORDER BY search_date DESC LIMIT 10', [userId]);
+        searchHistory = rows.map(row => row.search_term);
+    } catch (error) {
+        console.error('Error fetching search history:', error);
+    }
+    res.render('index', { searchHistory });
+});
 
 app.post('/search', async (req, res) => {
     console.log(req.body)

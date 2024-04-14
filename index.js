@@ -82,7 +82,7 @@ app.get('/profile/prev', async (req, res) => {
     } catch (error) {
         console.error('Error fetching search history:', error);
     }
-    res.json({ searchHistory }); // Send JSON data
+    res.json({ searchHistory });
 });
 
 app.get('/logout', (req, res) => {

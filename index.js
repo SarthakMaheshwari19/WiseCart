@@ -61,13 +61,32 @@ app.get('/logout', (req, res) => {
 });
 
 
-
-app.get('/', (req, res) => {
-    res.render('index');  
+app.get('/', async (req, res) => {
+    const userId = req.session.userId; // Assuming the user's ID is stored in the session
+    let searchHistory = [];
+    try {
+        const [rows] = await db.promise().query('SELECT search_term FROM search_history WHERE user_id = ? ORDER BY search_date DESC LIMIT 10', [userId]);
+        searchHistory = rows.map(row => row.search_term);
+    } catch (error) {
+        console.error('Error fetching search history:', error);
+    }
+    res.render('index', { searchHistory });
 });
+// app.get('/', (req, res) => {
+//     res.render('index');  
+// });
 
 app.post('/search', async (req, res) => {
     console.log(req.body)
+    const user_Id = req.session.userId; // Assuming the user's ID is stored in the session
+    const searching_term = req.body.search || `${req.body.origin} to ${req.body.destination}`;
+    // Insert search term and user ID into the database
+    try {
+        await db.promise().query('INSERT INTO search_history (search_term, user_id) VALUES (?, ?)', [searching_term, user_Id]);
+    } catch (error) {
+        console.error('Error saving search term to database:', error);
+    } // Assuming the user's ID is stored in the session
+
     // const search_term = req.body.search;
     const category = req.body.category;
     let myntraData = [];
@@ -78,6 +97,7 @@ app.post('/search', async (req, res) => {
 
     if (category === 'electronics' || category === 'lifestyle') {
         const search_term = req.body.search;
+        
         amazonData = await getScrapedData('http://127.0.0.1:5001/amazon', search_term);
         flipkartData = await getScrapedData('http://127.0.0.1:5001/flipkart', search_term);
 
@@ -114,10 +134,9 @@ app.post('/search', async (req, res) => {
     res.render(path.join(__dirname, 'views', 'results.ejs'), { amazonData, flipkartData, myntraData, paytmFlightsData, makemytripData, userId });
 });
 
-app.get('/goBack', (req, res) => {
-    // res.send('<script>window.history.back(-1);</script>');
-    res.redirect('back');
-});
+// app.get('/goBack', (req, res) => {
+//     res.redirect('back');
+// });
 
 async function getScrapedData(apiEndpoint, search_term) {
     try {
@@ -131,7 +150,6 @@ async function getScrapedData(apiEndpoint, search_term) {
 async function getFlightData(apiEndpoint,params){
     try {
         const response =await axios.get(apiEndpoint,{ params });
-        console.log('sex kardunga pata bhi nhi chalega',response.data)
         return (response.data);
     } catch (error){
         console.error(`Error fetching data from ${apiEndpoint}:`, error.message);

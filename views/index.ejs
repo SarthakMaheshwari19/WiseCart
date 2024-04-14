@@ -149,6 +149,16 @@
         a:hover svg {
             stroke: #A8C0FF
         }
+
+        .search-history-box {
+        display: inline-block;
+        padding: 5px 10px;
+        margin: 5px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #f0f0f0;
+        }
+        
     </style>
 </head>
 
@@ -207,6 +217,14 @@
             <input type="text" name="search" placeholder="Search products" id="productSearchInput">
         </div>
         <button type="submit">Search</button>
+        <div id="search-history" style="width: 100%; text-align: center;">
+            <h3 style="color: black; font-size: 16px;">Recent Searches</h3>
+            <div class="search-history-container" style="display: flex;flex-wrap: wrap; justify-content: center;">
+                <% searchHistory.forEach(function(term) { %>
+                    <div class="search-history-box"><%= term %></div>
+                <% }); %>
+            </div>
+        </div>
     </form>
     <script>
         document.addEventListener("DOMContentLoaded", () => {

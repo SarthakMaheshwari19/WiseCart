@@ -19,153 +19,152 @@ from selenium.webdriver.support import expected_conditions as EC
 
 app = Flask(__name__)
 CORS(app)
-# headers = {
-#     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36 Edg/122.0.2365.52'
-# }
-
-# try:
-#     @retry(RequestException, tries=3, delay=3, backoff=2)
-#     @app.route('/amazon')
-#     def get_amazon_results():
-#         search_term = request.args.get('term') 
-#         url = f"https://www.amazon.in/s?k={search_term}"
-#         response = requests.get(url, headers=headers)
-
-#         if response.status_code == 200:
-#             # Parse HTML
-#             soup = BeautifulSoup(response.content, 'html.parser')
-#             # Initialize results
-#             results = []
-
-#             # Extract data from search results
-#             for item in soup.select('div[data-asin][data-component-type="s-search-result"]'):
-                
-#                 brand_element = item.select_one('span.a-size-base-plus.a-color-base') 
-
-#                 title_element = item.select_one('span.a-size-base-plus.a-color-base.a-text-normal')
-#                 if title_element is None:
-#                     title_element = item.select_one('span.a-size-medium.a-color-base.a-text-normal')
-                
-#                 print(title_element)
-#                 print("1")
-#                 price_element = item.select_one('span.a-price > span.a-offscreen')
-#                 if price_element is None:
-#                     price_element = item.select_one('spam.a-price-whole')
-               
-#                 print(title_element)
-#                 url_element = item.select_one('a.a-link-normal.s-no-outline')['href']
-#                 if url_element is None:
-#                     url_element = item.select_one('a.a-link-normal.s-underline-text.s-underline-link-text.s-link-style.a-text-normal')['href']
-               
-#                 print(url_element)
-#                 image_element = item.select_one('img.s-image')
-#                 image_url = image_element['src'] if image_element else None
-
-#                 print(image_url)
-#                 print("4")
-
-#                 if title_element and price_element and url_element:
-#                     title = title_element.text if hasattr(title_element, 'text') else ""
-#                     if brand_element:
-#                         brand = brand_element.text if hasattr(brand_element, 'text') else ""
-#                         title = f'{brand} - {title}'
-#                     price = price_element.text if hasattr(price_element, 'text') else ""
-#                     url = url_element
-
-#                     # Construct product object
-#                     product = {
-#                         "title": title,
-#                         "price": price, 
-#                         "url": f'https://www.amazon.in{url}',
-#                         "image_url": image_url
-#                     }   
-
-#                     # Append to results
-#                     results.append(product)
-#                 else:
-#                     print("Skipping incomplete result")
-
-#             return jsonify(results)
-    
-#         else:
-#             print('Amazon request failed')
-#             return []
-
-headers = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36 Edg/123.0.2420.81'
-}
 
 try:
-    @retry(RequestException, tries=3, delay=2, backoff=2)
+    @retry(RequestException, tries=3, delay=3, backoff=2)
     @app.route('/amazon')
     def get_amazon_results():
+        search_term = request.args.get('term') 
+        url = f"https://www.amazon.in/s?k={search_term}"
+        header = {"User-Agent": "Edg/123.0.2420.81"}
+        response = requests.get(url, headers=header)
+        print(response.status_code)
 
-        search_term = request.args.get('term')
-        service = Service(r"C:\Users\sarth\Downloads\edgedriver_win64(3)\msedgedriver.exe")
-        driver = webdriver.Edge(service=service)
-        link=f"https://www.amazon.in/s?k={search_term}"
-        driver.get(link)
-        time.sleep(1)
-        response = driver.execute_script("return document.readyState")
-        print(response) 
-        try:
-            response = driver.execute_script("return document.readyState")
-            print(response)
-            if response == "complete":
-                # driver.quit()
-            # if (1):
-            # if response.status_code == 200:
-                # Parse HTML
-                soup = BeautifulSoup(driver.page_source, 'html.parser')  
-                results = []
-                print('hello')
-                # Extract data from search results
-                for item in soup.select('div[data-asin][data-component-type="s-search-result"]'):
-                    
-                    brand_element = item.select_one('span.a-size-base-plus.a-color-base') 
+        if response.status_code == 200:
+            # Parse HTML
+            soup = BeautifulSoup(response.content, 'html.parser')
+            # Initialize results
+            results = []
 
-                    title_element = item.select_one('span.a-size-base-plus.a-color-base.a-text-normal')
-                    if title_element is None:
-                        title_element = item.select_one('span.a-size-medium.a-color-base.a-text-normal')
-                    
-                    price_element = item.select_one('span.a-price > span.a-offscreen')
-                    url_element = item.select_one('a.a-link-normal.s-no-outline')['href']
-                    if url_element is None:
-                        url_element = item.select_one('a.a-link-normal.s-underline-text.s-underline-link-text.s-link-style.a-text-normal')['href']
-
-                    image_element = item.select_one('img.s-image')
-                    image_url = image_element['src'] if image_element else None
+            # Extract data from search results
+            for item in soup.select('div[data-asin][data-component-type="s-search-result"]'):
                 
+                brand_element = item.select_one('span.a-size-base-plus.a-color-base') 
 
-                    if title_element and price_element and url_element:
-                        title = title_element.text if hasattr(title_element, 'text') else ""
-                        if brand_element:
-                            brand = brand_element.text if hasattr(brand_element, 'text') else ""
-                            title = f'{brand} - {title}'
-                        price = price_element.text if hasattr(price_element, 'text') else ""
-                        url = url_element
+                title_element = item.select_one('span.a-size-base-plus.a-color-base.a-text-normal')
+                if title_element is None:
+                    title_element = item.select_one('span.a-size-medium.a-color-base.a-text-normal')
+                
+                print(title_element)
+                print("1")
+                price_element = item.select_one('span.a-price > span.a-offscreen')
+                if price_element is None:
+                    price_element = item.select_one('spam.a-price-whole')
+               
+                print(title_element)
+                url_element = item.select_one('a.a-link-normal.s-no-outline')['href']
+                if url_element is None:
+                    url_element = item.select_one('a.a-link-normal.s-underline-text.s-underline-link-text.s-link-style.a-text-normal')['href']
+               
+                print(url_element)
+                image_element = item.select_one('img.s-image')
+                image_url = image_element['src'] if image_element else None
 
-                        # Construct product object
-                        product = {
-                            "title": title,
-                            "price": price, 
-                            "url": f'https://www.amazon.in{url}',
-                            "image_url": image_url
-                        }   
+                print(image_url)
+                print("4")
 
-                        # Append to results
-                        results.append(product)
-                    else:
-                        print("Skipping incomplete result")
+                if title_element and price_element and url_element:
+                    title = title_element.text if hasattr(title_element, 'text') else ""
+                    if brand_element:
+                        brand = brand_element.text if hasattr(brand_element, 'text') else ""
+                        title = f'{brand} - {title}'
+                    price = price_element.text if hasattr(price_element, 'text') else ""
+                    url = url_element
 
-                return jsonify(results)
-            
-        except Exception as e:
-            print("Error parsing page: ", e)
+                    # Construct product object
+                    product = {
+                        "title": title,
+                        "price": price, 
+                        "url": f'https://www.amazon.in{url}',
+                        "image_url": image_url
+                    }   
+
+                    # Append to results
+                    results.append(product)
+                else:
+                    print("Skipping incomplete result")
+
+            return jsonify(results)
+    
+        else:
+            print('Amazon request failed')
             return []
 
-        finally:
-            driver.quit()
+# headers = {
+#     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36 Edg/123.0.2420.81'
+# }
+# 
+# try:
+#     @retry(RequestException, tries=3, delay=2, backoff=2)
+#     @app.route('/amazon')
+#     def get_amazon_results():
+
+#         search_term = request.args.get('term')
+#         service = Service(r"C:\Users\sarth\Downloads\edgedriver_win64(3)\msedgedriver.exe")
+#         driver = webdriver.Edge(service=service)
+#         link=f"https://www.amazon.in/s?k={search_term}"
+#         driver.get(link)
+#         time.sleep(1)
+#         response = driver.execute_script("return document.readyState")
+#         print(response) 
+#         try:
+#             response = driver.execute_script("return document.readyState")
+#             print(response)
+#             if response == "complete":
+#                 # driver.quit()
+#             # if (1):
+#             # if response.status_code == 200:
+#                 # Parse HTML
+#                 soup = BeautifulSoup(driver.page_source, 'html.parser')  
+#                 results = []
+#                 print('hello')
+#                 # Extract data from search results
+#                 for item in soup.select('div[data-asin][data-component-type="s-search-result"]'):
+                    
+#                     brand_element = item.select_one('span.a-size-base-plus.a-color-base') 
+
+#                     title_element = item.select_one('span.a-size-base-plus.a-color-base.a-text-normal')
+#                     if title_element is None:
+#                         title_element = item.select_one('span.a-size-medium.a-color-base.a-text-normal')
+                    
+#                     price_element = item.select_one('span.a-price > span.a-offscreen')
+#                     url_element = item.select_one('a.a-link-normal.s-no-outline')['href']
+#                     if url_element is None:
+#                         url_element = item.select_one('a.a-link-normal.s-underline-text.s-underline-link-text.s-link-style.a-text-normal')['href']
+
+#                     image_element = item.select_one('img.s-image')
+#                     image_url = image_element['src'] if image_element else None
+                
+
+#                     if title_element and price_element and url_element:
+#                         title = title_element.text if hasattr(title_element, 'text') else ""
+#                         if brand_element:
+#                             brand = brand_element.text if hasattr(brand_element, 'text') else ""
+#                             title = f'{brand} - {title}'
+#                         price = price_element.text if hasattr(price_element, 'text') else ""
+#                         url = url_element
+
+#                         # Construct product object
+#                         product = {
+#                             "title": title,
+#                             "price": price, 
+#                             "url": f'https://www.amazon.in{url}',
+#                             "image_url": image_url
+#                         }   
+
+#                         # Append to results
+#                         results.append(product)
+#                     else:
+#                         print("Skipping incomplete result")
+
+#                 return jsonify(results)
+            
+#         except Exception as e:
+#             print("Error parsing page: ", e)
+#             return []
+
+#         finally:
+#             driver.quit()
     
         # else:
         #     print('Amazon request failed')
@@ -193,7 +192,7 @@ try:
             for i in range(1, 6):
                 scroll_position = i * (driver.execute_script("return document.body.scrollHeight") / 8)
                 driver.execute_script(f"window.scrollTo(0, {scroll_position});")
-                time.sleep(1)
+                time.sleep(0.3)
 
             response = driver.execute_script("return document.readyState")
             print(response)
@@ -482,6 +481,24 @@ try:
                  print(1)
              for flight in flight_data:
                  print(2)
+                  # Note: Replace 'button.book-btn' with the actual selector for the booking button
+                #  booking_button = flight.find_element_by_css_selector('button.btn.book-bt-n.ng-scope')
+                
+                # # Click the booking button
+                #  booking_button.click()
+                
+                # # Wait for the new page to load. Adjust the timeout as necessary.
+                #  WebDriverWait(driver,0.2).until(EC.url_changes)
+                
+                # # Extract the current URL, which is now the booking page URL
+                #  booking_url = driver.current_url if driver.current_url else None
+                
+                # # Navigate back to the original page with the list of flights
+                #  driver.back()
+                
+                # # Wait for the original page to load. Adjust the selector as necessary.
+                #  WebDriverWait(driver,0.2).until(EC.presence_of_element_located((By.CSS_SELECTOR, 'div.row.no-margn.fltResult.ng-scope')))
+                
                  airline_element = flight.select_one("div.col-md-7.col-sm-7.padd-lft.airl-txt-n > span.txt-r4.ng-binding")
                  airline = airline_element.text if hasattr(airline_element, 'text') else ""
 
@@ -494,11 +511,11 @@ try:
                  duration_element = flight.select_one("div.col-md-2.col-sm-2.col-xs-5.non-st > span.dura_md.ng-binding")
                  duration = duration_element.text if hasattr(duration_element, 'text') else ""
 
-                 price_element = flight.select_one("div.col-md-2.col-sm-2.col-xs-5.mr5.cle > div.txt-r6-n.ng-scope > span.ng-binding")
+                 price_element = flight.select_one("div.col-md-2.col-sm-2.col-xs-5.mr5.cle > div.fareflex > div.ng-scope > div.txt-r6-n.ng-scope > span.ng-binding")
                  price = price_element.text if hasattr(price_element, 'text') else ""
 
                  print(airline)
-
+                #  if booking_url is None:
                  booking_url = url
 
                  flight_details = {

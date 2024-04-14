@@ -186,7 +186,7 @@
 <body>
     <nav class="navbar">
         <div class="navbar-left">
-            <a href="/goback">
+            <a href="#" onclick="goBack()">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 20" fill="none" stroke="currentColor"
                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="22">
                     <path d="M19 12H5M12 5l-7 7 7 7" />
@@ -227,36 +227,39 @@
     <div style="height: 100px;"></div>
 
     <div class="container">
-        <div class="column">
-            <div class="column-header">Amazon Results</div>
-            <div class="column-content">
-                <ul>
-                    <!-- Amazon data rendering -->
-                    <% amazonData.forEach(product=> { %>
-                        <li>
-                            <svg class="wishlist-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                                fill="#edeff1" stroke="currentColor" stroke-width="0.5" stroke-linecap="round"
-                                stroke-linejoin="round" width="24" height="24">
-                                <path
-                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
-                                </path>
-                            </svg>
-                            <img src="<%= product.image_url %>" alt="<%= product.title %>">
-                            <div>
-                                <h3>
-                                    <%= product.title %>
-                                </h3>
+        <% if (amazonData && amazonData.length> 0) { %>
+            <div id="amazon-results" class="column">
+                <div class="column-header">Amazon Results</div>
+                <div class="column-content">
+                    <ul>
+                        <!-- Amazon data rendering -->
+                        <% amazonData.forEach(product=> { %>
+                            <li>
+                                <svg class="wishlist-icon" xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 24 24" fill="#edeff1" stroke="currentColor"
+                                    stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"
+                                    width="24" height="24">
+                                    <path
+                                        d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+                                    </path>
+                                </svg>
+                                <img src="<%= product.image_url %>" alt="<%= product.title %>">
+                                <div>
+                                    <h3>
+                                        <%= product.title %>
+                                    </h3>
 
-                                <p>
-                                    <%= product.price %>
-                                </p>
-                                <a href="<%= product.url %>" target="_blank">View Details</a>
-                            </div>
-                        </li>
-                        <% }) %>
-                </ul>
+                                    <p>
+                                        <%= product.price %>
+                                    </p>
+                                    <a href="<%= product.url %>" target="_blank">View Details</a>
+                                </div>
+                            </li>
+                            <% }) %>
+                    </ul>
+                </div>
             </div>
-        </div>
+        <% } %>
 
         <% if (myntraData && myntraData.length> 0) { %>
             <div id="myntra-results" class="column">
@@ -266,8 +269,9 @@
                         <!-- Myntra data rendering -->
                         <% myntraData.forEach(product=> { %>
                             <li>
-                                <svg class="wishlist-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                                    fill="#edeff1" stroke="currentColor" stroke-width="0.5" stroke-linecap="round"
+                                <svg class="wishlist-icon" xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 24 24" fill="#edeff1" stroke="currentColor"
+                                    stroke-width="0.5" stroke-linecap="round"
                                     stroke-linejoin="round" width="24" height="24">
                                     <path
                                         d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
@@ -291,78 +295,102 @@
             </div>
         <% } %>
 
-
-                <div class="column">
-                    <div class="column-header">Flipkart Results</div>
-                    <div class="column-content">
-                        <ul>
-                            <!-- Flipkart data rendering -->
-                            <% flipkartData.forEach(product=> { %>
-                                <li>
-                                    <svg class="wishlist-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                                        fill="#edeff1" stroke="currentColor" stroke-width="0.5" stroke-linecap="round"
-                                        stroke-linejoin="round" width="24" height="24">
-                                        <path
-                                            d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
-                                        </path>
-                                    </svg>
-                                    <img src="<%= product.image_url %>" alt="<%= product.title %>">
-                                    <div>
-                                        <h3>
-                                            <%= product.title %>
-                                        </h3>
-                                        <p>
-                                            <%= product.price %>
-                                        </p>
-                                        <a href="<%= product.url %>" target="_blank">View Details</a>
-                                    </div>
-                                </li>
-                                <% }) %>
-                        </ul>
-                    </div>
-                </div>
-
-        
-
-        <% if (paytmFlightsData && paytmFlightsData.length > 0) { %>
-            <div id="paytmFlights-results" class="column">
-                <div class="column-header">Paytm Flights Results</div>
+        <% if (flipkartData && flipkartData.length> 0) { %>
+            <div id="flipkart-results" class="column">
+                <div class="column-header">Flipkart Results</div>
                 <div class="column-content">
                     <ul>
-                        <% paytmFlightsData.forEach(flight => { %>
+                        <!-- Flipkart data rendering -->
+                        <% flipkartData.forEach(product=> { %>
                             <li>
+                                <svg class="wishlist-icon"
+                                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                    fill="#edeff1" stroke="currentColor" stroke-width="0.5"
+                                    stroke-linecap="round" stroke-linejoin="round"
+                                    width="24" height="24">
+                                    <path
+                                        d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+                                    </path>
+                                </svg>
+                                <img src="<%= product.image_url %>"
+                                    alt="<%= product.title %>">
                                 <div>
-                                    <h3><%= flight.airline %></h3>
-                                    <p>Origin: <%= flight.origin %> | Destination: <%= flight.destination %></p>
-                                    <p>Departure: <%= flight.departureTime %> | Arrival: <%= flight.arrivalTime %></p>
-                                    <p>Duration: <%= flight.duration %></p>
-                                    <p>Price: <%= flight.price %></p>
-                                    <a href="<%= flight.bookingUrl %>" target="_blank">View Details</a>
+                                    <h3>
+                                        <%= product.title %>
+                                    </h3>
+                                    <p>
+                                        <%= product.price %>
+                                    </p>
+                                    <a href="<%= product.url %>" target="_blank">View
+                                        Details</a>
                                 </div>
                             </li>
-                        <% }) %>
+                            <% }) %>
                     </ul>
                 </div>
             </div>
         <% } %>
-                
-        <% if (makemytripData && makemytripData.length > 0) { %>
+
+
+        <% if (paytmFlightsData && paytmFlightsData.length> 0) { %>
+            <div id="paytmFlights-results" class="column">
+                <div class="column-header">Ease My Trip Results</div>
+                <div class="column-content">
+                    <ul>
+                        <% paytmFlightsData.forEach(flight=> { %>
+                            <li>
+                                <div>
+                                    <h3>
+                                        <%= flight.airline %>
+                                    </h3>
+                                    <p>Origin: <%= flight.origin %> | Destination:
+                                            <%= flight.destination %>
+                                    </p>
+                                    <p>Departure: <%= flight.departureTime %> |
+                                            Arrival: <%= flight.arrivalTime %>
+                                    </p>
+                                    <p>Duration: <%= flight.duration %>
+                                    </p>
+                                    <p>Price: <%= flight.price %>
+                                    </p>
+                                    <a href="<%= flight.bookingUrl %>"
+                                        target="_blank">View Details</a>
+                                </div>
+                            </li>
+                            <% }) %>
+                    </ul>
+                </div>
+            </div>
+        <% } %>
+
+        <% if (makemytripData && makemytripData.length> 0) { %>
             <div id="makemytrip-results" class="column">
                 <div class="column-header">MakeMyTrip Results</div>
                 <div class="column-content">
                     <ul>
-                        <% makemytripData.forEach(flight => { %>
+                        <% makemytripData.forEach(flight=> { %>
                             <li>
                                 <div>
-                                    <h3><%= flight.airline %></h3>
-                                    <p>Origin: <%= flight.origin %> | Destination: <%= flight.destination %></p>
-                                    <p>Departure: <%= flight.departureTime %> | Arrival: <%= flight.arrivalTime %></p>
-                                    <p>Duration: <%= flight.duration %></p>
-                                    <p>Price: <%= flight.price %></p>
-                                    <a href="<%= flight.bookingUrl %>" target="_blank">View Details</a>
+                                    <h3>
+                                        <%= flight.airline %>
+                                    </h3>
+                                    <p>Origin: <%= flight.origin %> |
+                                            Destination: <%=
+                                                flight.destination %>
+                                    </p>
+                                    <p>Departure: <%= flight.departureTime
+                                            %> | Arrival: <%=
+                                                flight.arrivalTime %>
+                                    </p>
+                                    <p>Duration: <%= flight.duration %>
+                                    </p>
+                                    <p>Price: <%= flight.price %>
+                                    </p>
+                                    <a href="<%= flight.bookingUrl %>"
+                                        target="_blank">View Details</a>
                                 </div>
                             </li>
-                        <% }) %>
+                            <% }) %>
                     </ul>
                 </div>
             </div>
@@ -370,80 +398,83 @@
 
 
     </div>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const wishlistIcons = document.querySelectorAll('.wishlist-icon');
-            wishlistIcons.forEach(icon => {
-                icon.addEventListener('click', async (event) => {
-                    event.stopPropagation(); // Stop event propagation to prevent accidental redirection
+            <script>
+                function goBack() {
+                  window.history.back();
+                }
+                document.addEventListener('DOMContentLoaded', () => {
+                    const wishlistIcons = document.querySelectorAll('.wishlist-icon');
+                    wishlistIcons.forEach(icon => {
+                        icon.addEventListener('click', async (event) => {
+                            event.stopPropagation(); // Stop event propagation to prevent accidental redirection
 
-                    const productDetails = icon.parentElement;
-                    const userId = '<%= userId %>';
-                    const name = productDetails.querySelector('h3').textContent;
-                    const price = productDetails.querySelector('p').textContent;
-                    const link = productDetails.querySelector('a').href;
-                    const image_link = productDetails.querySelector('img').src;
+                            const productDetails = icon.parentElement;
+                            const userId = '<%= userId %>';
+                            const name = productDetails.querySelector('h3').textContent;
+                            const price = productDetails.querySelector('p').textContent;
+                            const link = productDetails.querySelector('a').href;
+                            const image_link = productDetails.querySelector('img').src;
 
-                    const isPink = icon.style.fill === 'rgb(255, 65, 108)';
-                    // alert(isPink);
-                    // alert(icon.style.fill);
+                            const isPink = icon.style.fill === 'rgb(255, 65, 108)';
+                            // alert(isPink);
+                            // alert(icon.style.fill);
 
-                    try {
-                        if (!isPink) {
-                            const response = await fetch('/wishlist/add', {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json'
-                                },
-                                body: JSON.stringify({ userId, name, price, link, image_link })
-                            });
-                            if (response.ok) {
-                                const responseData = await response.json();
-                                if (responseData.success) {
-                                    const productId = responseData.productId;
-                                    icon.dataset.productId = productId;
-                                    icon.style.fill = '#FF416c';
-                                    alert('Product added to wishlist successfully!');
+                            try {
+                                if (!isPink) {
+                                    const response = await fetch('/wishlist/add', {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/json'
+                                        },
+                                        body: JSON.stringify({ userId, name, price, link, image_link })
+                                    });
+                                    if (response.ok) {
+                                        const responseData = await response.json();
+                                        if (responseData.success) {
+                                            const productId = responseData.productId;
+                                            icon.dataset.productId = productId;
+                                            icon.style.fill = '#FF416c';
+                                            alert('Product added to wishlist successfully!');
+                                        } else {
+                                            alert(responseData.message);
+                                        }
+                                    } else {
+                                        alert('Failed to add product to wishlist.');
+                                    }
+
                                 } else {
-                                    alert(responseData.message);
+                                    const productId = icon.dataset.productId;
+                                    const response = await fetch('/wishlist/remove', {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/json'
+                                        },
+                                        body: JSON.stringify({ userId, productId })
+                                    });
+                                    if (response.ok) {
+                                        icon.style.fill = '#edeff1';
+                                        alert('Product removed from wishlist.');
+                                    } else {
+                                        alert('Failed to remove product from wishlist.');
+                                    }
+                                    icon.addEventListener('mouseover', () => {
+                                        icon.style.fill = '#FF416c';
+                                    });
+
+                                    icon.addEventListener('mouseout', () => {
+                                        icon.style.fill = '#edeff1';
+                                    });
+
                                 }
-                            } else {
-                                alert('Failed to add product to wishlist.');
+                            } catch (error) {
+                                console.error('Error:', error);
+                                alert('Failed to perform wishlist action.');
                             }
-
-                        } else {
-                            const productId = icon.dataset.productId;
-                            const response = await fetch('/wishlist/remove', {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json'
-                                },
-                                body: JSON.stringify({ userId, productId })
-                            });
-                            if (response.ok) {
-                                icon.style.fill = '#edeff1';
-                                alert('Product removed from wishlist.');
-                            } else {
-                                alert('Failed to remove product from wishlist.');
-                            }
-                            icon.addEventListener('mouseover', () => {
-                                icon.style.fill = '#FF416c';
-                            });
-
-                            icon.addEventListener('mouseout', () => {
-                                icon.style.fill = '#edeff1';
-                            });
-
-                        }
-                    } catch (error) {
-                        console.error('Error:', error);
-                        alert('Failed to perform wishlist action.');
-                    }
+                        });
+                    });
                 });
-            });
-        });
 
-    </script>
+            </script>
 </body>
 
 </html>

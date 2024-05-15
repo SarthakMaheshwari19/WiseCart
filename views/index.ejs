@@ -117,7 +117,7 @@
             border-radius: 10px;
             box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25);
             width: 480px;
-            margin: 210px auto;
+            margin: 150px auto;
             padding: 50px;
             display: flex;
             flex-direction: column;
@@ -162,7 +162,7 @@
     </style>
 </head>
 
-<body>
+<body onpageshow="if (event.persisted) window.location.reload()">
     <nav class="navbar">
         <div class="navbar-left">
             <span>
@@ -213,8 +213,14 @@
             <option value="flights">Flights</option>
         </select>
         <div id="flight-search" style="display: none;">
-            <input type="text" name="origin" placeholder="Origin City">
-            <input type="text" name="destination" placeholder="Destination City">
+            <input type="text" name="origin" placeholder="Origin City" list="city-list">
+            <input type="text" name="destination" placeholder="Destination City" list="city-list">
+            <datalist id="city-list">
+                <% const cityNames = ["Agartala", "Agatti", "Agra", "Akola", "Allahabad", "Along", "Ambala", "Aurangabad", "Siliguri", "Bareilly", "Hyderabad", "Belgaum", "Bellary", "Bathinda", "Bhavnagar", "Bhuj", "Bidar", "Bhubaneswar", "Bilaspur", "Ranchi", "Calicut", "Car Nicobar", "Chandigarh", "Lucknow", "Chennai", "Mumbai", "Kochi", "Coimbatore", "Vasco da Gama", "Daman", "Dehradun", "Indore", "Dhanbad", "Dibrugarh", "Dimapur", "Nagpur", "Gaya", "Gorakhpur", "Gwalior", "Bangalore", "Jalpaiguri", "Hisar", "Hubli", "Imphal", "New Delhi", "Jabalpur", "Jaipur", "Jaisalmer", "Bengaluru", "Jammu", "Jamnagar", "Jodhpur", "Jorhat", "Kadapa", "Bhutan", "Leh", "Aizawl", "Patna", "Guwahati", "Ludhiana", "Madurai", "Udaipur", "Mangalore", "Latur", "Varanasi", "Aizawl", "Patna", "Guwahati", "Ludhiana", "Madurai", "Udaipur", "Mangalore", "Pune", "Bhopal", "Rajahmundry", "Hyderabad", "Rajkot", "Ratnagiri", "Rewa", "Rourkela", "Salem", "Ahmedabad", "Srinagar", "Shillong", "Shirdi", "Silchar", "Solapur", "Jamshedpur", "Amritsar", "Puttaparthi", "Surat", "Tezpur", "Tiruchirappally", "Thiruvananthapuram", "Vijayawada", "Port Blair", "Ziro", "Kolkata"]; %>
+                <% cityNames.forEach(function(city) { %>
+                    <option value="<%= city %>">
+                <% }); %>
+            </datalist>
             <div style="margin-left: 10px; display: flex;">
                 <label style="margin-right:20px;margin-left: 12px;" for="departureDate">Departure Date:</label>
                 <input type="date" name="departureDate" id="departureDate" placeholder="Departure Date">

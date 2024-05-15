@@ -206,6 +206,10 @@
             background-color: #FF416C;
             color: #FFF;
         }
+
+        #wishlist-svg {
+            fill: red;
+        }
     </style>
 </head>
 
@@ -231,14 +235,13 @@
                 WiseCart</span>
         </div>
         <div class="navbar-right">
-            <a href="/logout">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" fill="none" stroke="#aaa" stroke-width="2"
-                    stroke-linecap="round" stroke-linejoin="round" width="22" height="25">
-                    <path d="M18 20H8a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2z"></path>
-                    <polyline points="11 16 15 12 11 8"></polyline>
-                    <line x1="15" y1="12" x2="3" y2="12"></line>
+            <a href="/profile">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="22">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
                 </svg>
-                Logout</a>
+                Profile
+            </a>
             <a href="/wishlist">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 5 24 8" fill="none" stroke="currentColor"
                     stroke-width="4" stroke-linecap="round" stroke-linejoin="round" width="18" height="22">
@@ -248,9 +251,29 @@
                 </svg>
                 Wishlist
             </a>
+            <a href="/logout">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" fill="none" stroke="#aaa" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round" width="22" height="25">
+                    <path d="M18 20H8a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2z"></path>
+                    <polyline points="11 16 15 12 11 8"></polyline>
+                    <line x1="15" y1="12" x2="3" y2="12"></line>
+                </svg>
+                Logout
+            </a>
         </div>
     </nav>
+
+
     <div style="height: 100px;"></div>
+    <div style="text-align: center; font-size: 44px; font-weight: bold;">
+        <svg id="wishlist-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 5 24 8" fill="currentColor" stroke="currentColor" stroke-width="1"
+            stroke-linecap="round" stroke-linejoin="round" width="36" height="44">
+            <path
+                d="M12 21.35l-1.45-1.32C5.4 14.25 2 11.1 2 7.25 2 4.42 4.42 2 7.25 2c1.74 0 3.41.81 4.75 2.19C13.34 2.81 15.01 2 16.75 2 19.58 2 22 4.42 22 7.25c0 3.85-3.4 7-8.55 12.8L12 21.35z" />
+        </svg>
+        Wishlist
+    </div>
+
 
     <div class="container">
         <% if (wishlistedProducts && wishlistedProducts.length> 0) { %>

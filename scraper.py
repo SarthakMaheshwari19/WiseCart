@@ -94,7 +94,8 @@ CORS(app)
     #         return []
 
 headers = {
-    'User-Agent': 'Edg/123.0.2420.81'
+    # 'User-Agent': 'Edg/123.0.2420.81'
+    'User-Agent': 'Edg/125.0.2535.51'
 }
 
 try:
@@ -104,7 +105,8 @@ try:
     def get_amazon_results():
 
         search_term = request.args.get('term')
-        service = Service(r"C:\Users\sarth\Downloads\edgedriver_win64 (2)\msedgedriver.exe")
+        service = Service(r"C:\Users\sarth\Downloads\edgedriver_win64 (4)\msedgedriver.exe")
+        # service = Service(r"C:\Users\sarth\Downloads\edgedriver_win64 (2)\msedgedriver.exe")
         # service = Service(r"C:\Users\sarth\Downloads\chromedriver-win64\chromedriver-win64\chromedriver.exe")
         options = Options()
         options.add_argument('--headless')
@@ -186,8 +188,10 @@ try:
 
         options = Options()
         options.add_argument('--headless')
-        options.add_argument("user-agent=Edg/124.0.2478.80")
-        service = Service(r"C:\Users\sarth\Downloads\edgedriver_win64 (2)\msedgedriver.exe")
+        # options.add_argument("user-agent=Edg/124.0.2478.80")
+        options.add_argument("user-agent=Edg/125.0.2535.51")
+        service = Service(r"C:\Users\sarth\Downloads\edgedriver_win64 (4)\msedgedriver.exe")
+        # service = Service(r"C:\Users\sarth\Downloads\edgedriver_win64 (2)\msedgedriver.exe")
         # service = Service(r"C:\Users\sarth\Downloads\chromedriver-win64\chromedriver-win64\chromedriver.exe")
 
         # service = Service(r"C:\Users\sarth\Downloads\edgedriver_win64(3)\msedgedriver.exe")
@@ -473,7 +477,8 @@ try:
 
         headers_flipkart = {
             # 'User-Agent': ' Edg/123.0.2420.81',
-            'User-Agent': 'Edg/124.0.2478.80',
+            # 'User-Agent': 'Edg/124.0.2478.80',
+            'User-Agent': 'Edg/125.0.2535.51',
             # 'User-Agent': 'Chrome/124.0.6367.91',
             'Accept-Language': 'en-US,en;q=0.9',
             'Accept-Encoding': 'gzip, deflate, br',
@@ -696,7 +701,8 @@ try:
              options.add_argument("--headless")  # Run Edge in headless mode
 
              # Create a new instance of the Edge driver
-             driver_path = (r"C:\Users\sarth\Downloads\edgedriver_win64 (2)\msedgedriver.exe")
+             driver_path = (r"C:\Users\sarth\Downloads\edgedriver_win64 (4)\msedgedriver.exe")
+            #  driver_path = (r"C:\Users\sarth\Downloads\edgedriver_win64 (2)\msedgedriver.exe")
             #  driver_path="C:\\Users\\sarth\\Downloads\\chromedriver-win64\\chromedriver-win64\\chromedriver.exe"
 
              service = Service(executable_path=driver_path)
@@ -815,7 +821,8 @@ try:
             url = f"https://www.makemytrip.com/flight/search?itinerary={origin_code}-{destination_code}-{departureDate}&tripType=O&paxType=A-1_C-0_I-0&intl=false&cabinClass=E&ccde=IN&lang=eng"
             # Set up Chrome options
             options = Options()
-            options.add_argument("user-agent=Edg/124.0.2478.80")
+            # options.add_argument("user-agent=Edg/124.0.2478.80")
+            options.add_argument("user-agent=Edg/125.0.2535.51")
             options.add_argument("--headless")
             options.add_argument("--disable-gpu")
             options.add_argument("--no-sandbox")
@@ -824,7 +831,8 @@ try:
             options.add_argument("--profile.default_content_settings.cookies=1")  # Run Chrome in headless mode
 
             # Create a new instance of the Chrome driver
-            driver_path=(r"C:\Users\sarth\Downloads\edgedriver_win64 (2)\msedgedriver.exe")
+            driver_path = (r"C:\Users\sarth\Downloads\edgedriver_win64 (4)\msedgedriver.exe")
+            # driver_path=(r"C:\Users\sarth\Downloads\edgedriver_win64 (2)\msedgedriver.exe")
     #         driver_path="C:\\Users\\sarth\\Downloads\\chromedriver-win64\\chromedriver-win64\\chromedriver.exe"
             service = Service(executable_path=driver_path)
             driver = webdriver.Edge(service=service, options=options)
